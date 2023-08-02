@@ -1,0 +1,7 @@
+name: to_html
+version: 0.1.0
+license: MIT
+authors:
+  - Stefan Bilharz <stefan@sbsoftware.de>
+description: |
+  Define a fast `#to_html` method for any class via macros
