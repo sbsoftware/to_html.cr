@@ -1,2 +1,2 @@
 require "spec"
-require "../src/to_html"
+require "../src/*"
