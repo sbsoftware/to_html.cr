@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module ToHtml::DefToHtmlAttrs::TagGlobalMixSpec
+module ToHtml::InstanceTagAttrs::TagGlobalMixSpec
   class MyView
     ToHtml.instance_template do
       div MyAttributingClass do
@@ -13,7 +13,7 @@ module ToHtml::DefToHtmlAttrs::TagGlobalMixSpec
   end
 
   class MyAttributingClass
-    self_to_html_attrs do
+    ToHtml.class_tag_attrs do
       something = "foo"
       a do
         href = "example.com"
@@ -22,7 +22,7 @@ module ToHtml::DefToHtmlAttrs::TagGlobalMixSpec
   end
 
   class MyAttributingObject
-    def_to_html_attrs do
+    ToHtml.instance_tag_attrs do
       something = "foo"
       a do
         href = "example.com"

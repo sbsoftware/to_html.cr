@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module ToHtml::DefToHtmlAttrs::GlobalSpec
+module ToHtml::InstanceTagAttrs::GlobalSpec
   class MyView
     ToHtml.instance_template do
       div MyAttributeDefiningClass do
@@ -10,13 +10,13 @@ module ToHtml::DefToHtmlAttrs::GlobalSpec
   end
 
   class MyAttributeDefiningClass
-    self_to_html_attrs do
+    ToHtml.class_tag_attrs do
       anything = "blah"
     end
   end
 
   class MyAttributeDefiningObject
-    def_to_html_attrs do
+    ToHtml.instance_tag_attrs do
       something = "foo"
       data_controller = "my-ctrl"
     end

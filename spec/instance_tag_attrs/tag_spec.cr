@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module ToHtml::DefToHtmlAttrs::TagSpec
+module ToHtml::InstanceTagAttrs::TagSpec
   class MyView
     ToHtml.instance_template do
       div MyLinkAttributeClass do
@@ -17,7 +17,7 @@ module ToHtml::DefToHtmlAttrs::TagSpec
   end
 
   class MyLinkAttributeClass
-    self_to_html_attrs do
+    ToHtml.class_tag_attrs do
       a do
         href = "https://www.example.com"
       end
@@ -29,7 +29,7 @@ module ToHtml::DefToHtmlAttrs::TagSpec
   end
 
   class MyLinkAttributeObject
-    def_to_html_attrs do
+    ToHtml.instance_tag_attrs do
       a do
         href = "https://example.com"
       end
