@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module ToHtml::StaticClassTemplateSpec
+module ToHtml::DefToHtml::StaticClassTemplateSpec
   class MyView
     self_to_html do
       html do

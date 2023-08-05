@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module ToHtml::YieldSpec
+module ToHtml::DefToHtml::YieldSpec
   class Layout
     getter site_title : String
 

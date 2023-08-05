@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module ToHtml::ParametrisedPartialSpec
+module ToHtml::DefToHtml::ParametrisedPartialSpec
   class MyView
     def_to_html do
       div do

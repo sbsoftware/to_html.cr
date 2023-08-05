@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module ToHtml::ChainedMethodCallsSpec
+module ToHtml::DefToHtml::ChainedMethodCallsSpec
   class MyView
     getter my_model : MyModel
 

@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module ToHtml::InstanceMethodAccessSpec
+module ToHtml::DefToHtml::InstanceMethodAccessSpec
   class MyView
     def item1
       "Bla!"

@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module ToHtml::EachSpec
+module ToHtml::DefToHtml::EachSpec
   class List
     getter items : Array(String)
 

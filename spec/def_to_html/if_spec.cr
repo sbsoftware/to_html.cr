@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module ToHtml::IfSpec
+module ToHtml::DefToHtml::IfSpec
   class MyView
     getter switch : Bool
     getter option1 : String

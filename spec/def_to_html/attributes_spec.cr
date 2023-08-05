@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module ToHtml::AttributesSpec
+module ToHtml::DefToHtml::AttributesSpec
   class MyView
     def_to_html do
       div MyCssClass, MyOtherCssClass, {"class", "so-unique"} do
