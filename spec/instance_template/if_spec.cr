@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module ToHtml::DefToHtml::IfSpec
+module ToHtml::InstanceTemplate::IfSpec
   class MyView
     getter switch : Bool
     getter option1 : String
@@ -9,7 +9,7 @@ module ToHtml::DefToHtml::IfSpec
     def initialize(@switch, @option1, @option2)
     end
 
-    def_to_html do
+    ToHtml.instance_template do
       if switch
         p { "Hooray!" }
       end

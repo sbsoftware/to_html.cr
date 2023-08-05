@@ -1,8 +1,8 @@
 require "../spec_helper"
 
-module ToHtml::DefToHtml::StaticInstanceTemplateSpec
+module ToHtml::InstanceTemplate::StaticClassTemplateSpec
   class MyView
-    def_to_html do
+    ToHtml.class_template do
       html do
         head do
           title { "Title" }
@@ -14,7 +14,7 @@ module ToHtml::DefToHtml::StaticInstanceTemplateSpec
     end
   end
 
-  describe "MyView#to_html" do
+  describe "MyView.to_html" do
     it "should return the correct HTML" do
       expected = <<-HTML
       <html>
@@ -27,8 +27,7 @@ module ToHtml::DefToHtml::StaticInstanceTemplateSpec
       </html>
       HTML
 
-      MyView.new.to_html.should eq(expected)
+      MyView.to_html.should eq(expected)
     end
   end
 end
-

@@ -1,8 +1,8 @@
 require "../spec_helper"
 
-module ToHtml::DefToHtml::ParametrisedPartialSpec
+module ToHtml::InstanceTemplate::ParametrisedPartialSpec
   class MyView
-    def_to_html do
+    ToHtml.instance_template do
       div do
         MyPartial.new("Bee")
       end
@@ -15,7 +15,7 @@ module ToHtml::DefToHtml::ParametrisedPartialSpec
     def initialize(@content)
     end
 
-    def_to_html do
+    ToHtml.instance_template do
       p { content }
     end
   end

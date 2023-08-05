@@ -1,13 +1,13 @@
 require "../spec_helper"
 
-module ToHtml::DefToHtml::EachSpec
+module ToHtml::InstanceTemplate::EachSpec
   class List
     getter items : Array(String)
 
     def initialize(@items)
     end
 
-    def_to_html do
+    ToHtml.instance_template do
       ul do
         items.each do |item|
           Item.new(item)
@@ -22,7 +22,7 @@ module ToHtml::DefToHtml::EachSpec
     def initialize(@name)
     end
 
-    def_to_html do
+    ToHtml.instance_template do
       li { name }
     end
   end

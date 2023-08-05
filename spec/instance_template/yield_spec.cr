@@ -1,13 +1,13 @@
 require "../spec_helper"
 
-module ToHtml::DefToHtml::YieldSpec
+module ToHtml::InstanceTemplate::YieldSpec
   class Layout
     getter site_title : String
 
     def initialize(@site_title)
     end
 
-    def_to_html do
+    ToHtml.instance_template do
       html do
         head do
           title { site_title }
@@ -20,7 +20,7 @@ module ToHtml::DefToHtml::YieldSpec
   end
 
   class View
-    self_to_html do
+    ToHtml.class_template do
       h1 { "Hello" }
       p do
         "A few things to mention"

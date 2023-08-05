@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-module ToHtml::DefToHtml::InstanceMethodAccessSpec
+module ToHtml::InstanceTemplate::InstanceMethodAccessSpec
   class MyView
     def item1
       "Bla!"
@@ -10,7 +10,7 @@ module ToHtml::DefToHtml::InstanceMethodAccessSpec
       "foo"
     end
 
-    def_to_html do
+    ToHtml.instance_template do
       ol do
         li { item1 }
         li { item2 }

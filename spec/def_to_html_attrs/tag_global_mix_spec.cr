@@ -2,7 +2,7 @@ require "../spec_helper"
 
 module ToHtml::DefToHtmlAttrs::TagGlobalMixSpec
   class MyView
-    def_to_html do
+    ToHtml.instance_template do
       div MyAttributingClass do
         a MyAttributingClass
       end

@@ -1,8 +1,8 @@
 require "../spec_helper"
 
-module ToHtml::DefToHtml::AttributesSpec
+module ToHtml::InstanceTemplate::AttributesSpec
   class MyView
-    def_to_html do
+    ToHtml.instance_template do
       div MyCssClass, MyOtherCssClass, {"class", "so-unique"} do
         div MyStimulusController do
           p({"class", "so-special"}) do

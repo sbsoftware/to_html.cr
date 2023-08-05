@@ -2,7 +2,7 @@ require "../spec_helper"
 
 module ToHtml::DefToHtmlAttrs::GlobalSpec
   class MyView
-    def_to_html do
+    ToHtml.instance_template do
       div MyAttributeDefiningClass do
         div MyAttributeDefiningObject.new
       end

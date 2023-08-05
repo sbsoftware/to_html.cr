@@ -2,7 +2,7 @@ require "../spec_helper"
 
 module ToHtml::DefToHtmlAttrs::TagSpec
   class MyView
-    def_to_html do
+    ToHtml.instance_template do
       div MyLinkAttributeClass do
         a MyLinkAttributeClass do
           img MyLinkAttributeClass

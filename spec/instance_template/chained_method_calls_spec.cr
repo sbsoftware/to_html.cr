@@ -1,13 +1,13 @@
 require "../spec_helper"
 
-module ToHtml::DefToHtml::ChainedMethodCallsSpec
+module ToHtml::InstanceTemplate::ChainedMethodCallsSpec
   class MyView
     getter my_model : MyModel
 
     def initialize(@my_model)
     end
 
-    def_to_html do
+    ToHtml.instance_template do
       div do
         span { "Name" }
         span { my_model.name }
