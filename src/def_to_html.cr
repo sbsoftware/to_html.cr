@@ -1,6 +1,6 @@
 require "./attribute_hash"
 
-TAG_NAMES = %w[html head title body p ul ol li div strong i span h1 h2 h3 h4 h5 h6]
+TAG_NAMES = %w[html head title body p ul ol li div strong i span h1 h2 h3 h4 h5 h6 a img]
 
 macro def_to_html(&blk)
   def to_html(io, indent_level = 0)
@@ -113,7 +113,7 @@ macro to_html_add_tag(io, indent_level, break_line, call)
         {{arg}}.to_html_attrs({{call.name.stringify}}, %attr_hash)
       {% end %}
     {% end %}
-    {{io}} << " "
+    {{io}} << " " unless %attr_hash.empty?
     {{io}} << %attr_hash
   {% end %}
   {{io}} << ">"
