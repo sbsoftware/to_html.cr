@@ -1,2 +1,3 @@
 require "spec"
-require "../src/*"
+require "../src/instance_template"
+require "../src/instance_tag_attrs"
