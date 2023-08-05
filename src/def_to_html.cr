@@ -1,6 +1,5 @@
+require "./tag_names"
 require "./attribute_hash"
-
-TAG_NAMES = %w[html head title body p ul ol li div strong i span h1 h2 h3 h4 h5 h6 a img]
 
 macro def_to_html(&blk)
   def to_html(io, indent_level = 0)
@@ -57,7 +56,7 @@ macro to_html_eval_exps(io, indent_level, &blk)
 end
 
 macro to_html_eval_exp(io, indent_level, break_line = true, &blk)
-  {% if blk.body.is_a?(Call) && TAG_NAMES.includes?(blk.body.name.stringify) %}
+  {% if blk.body.is_a?(Call) && ToHtml::TAG_NAMES.includes?(blk.body.name.stringify) %}
     to_html_add_tag({{io}}, {{indent_level}}, {{break_line}}, {{blk.body}})
   {% elsif blk.body.is_a?(Call) && blk.body.receiver && blk.body.name.stringify == "each" %}
     {{blk.body.receiver}}.each_with_index do {% if !blk.body.block.args.empty? %} |{{blk.body.block.args.splat}}, %index| {% end %}
