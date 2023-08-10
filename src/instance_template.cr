@@ -104,8 +104,15 @@ module ToHtml
   macro to_html_add_tag(io, indent_level, break_line, call)
     {{io}} << "  " * {{indent_level}}
     {{io}} << "<{{call.name}}"
-    {% if !call.args.empty? %}
+    {% if !call.args.empty? || call.named_args %}
       %attr_hash = ToHtml::AttributeHash.new
+
+      {% if call.named_args %}
+        {% for named_arg in call.named_args %}
+          %attr_hash[{{named_arg.name.stringify}}] = {{named_arg.value}}.to_s
+        {% end %}
+      {% end %}
+
       {% for arg in call.args %}
         {% if arg.is_a?(TupleLiteral) %}
           %attr_hash[{{arg}}.first] = {{arg}}.last
@@ -113,6 +120,7 @@ module ToHtml
           {{arg}}.to_html_attrs({{call.name.stringify}}, %attr_hash)
         {% end %}
       {% end %}
+
       {{io}} << " " unless %attr_hash.empty?
       {{io}} << %attr_hash
     {% end %}
