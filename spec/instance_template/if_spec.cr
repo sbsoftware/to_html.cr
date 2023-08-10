@@ -41,7 +41,7 @@ module ToHtml::InstanceTemplate::IfSpec
 
           HTML
 
-          MyView.new(true, "Gaga", "Bubu").to_html.should eq(expected)
+          MyView.new(true, "Gaga", "Bubu").to_html.should eq(expected.squish)
         end
       end
 
@@ -57,7 +57,7 @@ module ToHtml::InstanceTemplate::IfSpec
           <span>Another one!</span>
           HTML
 
-          MyView.new(false, "Gaga", "Bubu").to_html.should eq(expected)
+          MyView.new(false, "Gaga", "Bubu").to_html.should eq(expected.squish)
         end
       end
     end

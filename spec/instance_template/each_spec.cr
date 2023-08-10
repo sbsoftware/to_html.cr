@@ -45,7 +45,7 @@ module ToHtml::InstanceTemplate::EachSpec
       </ul>
       HTML
 
-      list.to_html.should eq(expected)
+      list.to_html.should eq(expected.squish)
     end
   end
 end

@@ -27,7 +27,7 @@ module ToHtml::InstanceTemplate::StaticClassTemplateSpec
       </html>
       HTML
 
-      MyView.to_html.should eq(expected)
+      MyView.to_html.should eq(expected.squish)
     end
   end
 end

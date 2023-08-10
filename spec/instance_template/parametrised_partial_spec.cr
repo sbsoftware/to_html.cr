@@ -30,7 +30,7 @@ module ToHtml::InstanceTemplate::ParametrisedPartialSpec
       </div>
       HTML
 
-      MyView.new.to_html.should eq(expected)
+      MyView.new.to_html.should eq(expected.squish)
     end
   end
 end

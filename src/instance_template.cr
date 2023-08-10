@@ -64,7 +64,9 @@ module ToHtml
         ToHtml.to_html_eval_exps({{io}}, {{indent_level}}) do
           {{blk.body.block.body}}
         end
-        {{io}} << "\n" unless %index == {{blk.body.receiver}}.size - 1
+        {% if flag?(:to_html_pretty) %}
+          {{io}} << "\n" unless %index == {{blk.body.receiver}}.size - 1
+        {% end %}
       end
     {% elsif blk.body.is_a?(If) %}
       if {{blk.body.cond}}
@@ -72,7 +74,7 @@ module ToHtml
           ToHtml.to_html_eval_exps({{io}}, {{indent_level}}) do
             {{blk.body.then}}
           end
-          {% if break_line %}
+          {% if flag?(:to_html_pretty) && break_line %}
             {{io}} << "\n"
           {% end %}
         {% end %}
@@ -81,7 +83,7 @@ module ToHtml
           ToHtml.to_html_eval_exps({{io}}, {{indent_level}}) do
             {{blk.body.else}}
           end
-          {% if break_line %}
+          {% if flag?(:to_html_pretty) && break_line %}
             {{io}} << "\n"
           {% end %}
       {% end %}
@@ -95,14 +97,18 @@ module ToHtml
       if %var.responds_to?(:to_html)
         %var.to_html({{io}}, {{indent_level}})
       else
-        {{io}} << "  " * {{indent_level}}
+        {% if flag?(:to_html_pretty) %}
+          {{io}} << "  " * {{indent_level}}
+        {% end %}
         {{io}} << %var
       end
     {% end %}
   end
 
   macro to_html_add_tag(io, indent_level, break_line, call)
-    {{io}} << "  " * {{indent_level}}
+    {% if flag?(:to_html_pretty) %}
+      {{io}} << "  " * {{indent_level}}
+    {% end %}
     {{io}} << "<{{call.name}}"
     {% if !call.args.empty? || call.named_args %}
       %attr_hash = ToHtml::AttributeHash.new
@@ -129,14 +135,20 @@ module ToHtml
       {% if call.block.body.is_a?(StringLiteral) %}
         {{io}} << {{call.block.body}}
       {% else %}
-        {{io}} << "\n"
+        {% if flag?(:to_html_pretty) %}
+          {{io}} << "\n"
+        {% end %}
         ToHtml.to_html_eval_exps({{io}}, ({{indent_level}} + 1)) {{call.block}}
-        {{io}} << "\n"
-        {{io}} << "  " * {{indent_level}}
+        {% if flag?(:to_html_pretty) %}
+          {{io}} << "\n"
+        {% end %}
+        {% if flag?(:to_html_pretty) %}
+          {{io}} << "  " * {{indent_level}}
+        {% end %}
       {% end %}
     {% end %}
     {{io}} << "</{{call.name}}>"
-    {% if break_line %}
+    {% if flag?(:to_html_pretty) && break_line %}
       {{io}} << "\n"
     {% end %}
   end

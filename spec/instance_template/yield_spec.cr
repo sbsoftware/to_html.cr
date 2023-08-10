@@ -48,7 +48,7 @@ module ToHtml::InstanceTemplate::YieldSpec
 
       layout.to_html do |io, indent_level|
         View.to_html(io, indent_level)
-      end.should eq(expected)
+      end.should eq(expected.squish)
     end
   end
 end

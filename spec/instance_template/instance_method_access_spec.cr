@@ -31,7 +31,7 @@ module ToHtml::InstanceTemplate::InstanceMethodAccessSpec
       </ol>
       HTML
 
-      MyView.new.to_html.should eq(expected)
+      MyView.new.to_html.should eq(expected.squish)
     end
   end
 end

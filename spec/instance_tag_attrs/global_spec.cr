@@ -32,7 +32,7 @@ module ToHtml::InstanceTagAttrs::GlobalSpec
       </div>
       HTML
 
-      view.to_html.should eq(expected)
+      view.to_html.should eq(expected.squish)
     end
   end
 end

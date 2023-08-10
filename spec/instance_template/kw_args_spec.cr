@@ -17,7 +17,7 @@ module ToHtml::InstanceTemplate::KwArgsSpec
       <a href="https://www.example.com">example.com</a>
       HTML
 
-      view.to_html.should eq(expected)
+      view.to_html.should eq(expected.squish)
     end
   end
 end
