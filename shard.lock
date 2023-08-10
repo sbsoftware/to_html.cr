@@ -4,3 +4,7 @@ shards:
     git: https://github.com/stephannv/blueprint.git
     version: 0.4.0
 
+  water:
+    git: https://github.com/shootingfly/water.git
+    version: 1.0.0
+

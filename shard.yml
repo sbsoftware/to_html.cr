@@ -8,3 +8,5 @@ description: |
 development_dependencies:
   blueprint:
     github: stephannv/blueprint
+  water:
+    github: shootingfly/water
