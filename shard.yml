@@ -5,3 +5,6 @@ authors:
   - Stefan Bilharz <stefan@sbsoftware.de>
 description: |
   Define a fast `#to_html` method for any class via macros
+development_dependencies:
+  blueprint:
+    github: stephannv/blueprint
