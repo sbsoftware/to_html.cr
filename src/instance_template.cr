@@ -110,7 +110,18 @@ module ToHtml
       {{io}} << "  " * {{indent_level}}
     {% end %}
     {{io}} << "<{{call.name}}"
-    {% if !call.args.empty? || call.named_args %}
+    {% if call.named_args && call.args.empty? %}
+      {{io}} << " "
+      {% for named_arg, index in call.named_args %}
+        {{io}} << {{named_arg.name.stringify}}
+        {{io}} << "=\""
+        {{io}} << {{named_arg.value}}.to_s
+        {{io}} << "\""
+        {% if index < call.named_args.size - 1 %}
+          {{io}} << " "
+        {% end %}
+      {% end %}
+    {% else %}
       %attr_hash = ToHtml::AttributeHash.new
 
       {% if call.named_args %}
