@@ -4,9 +4,8 @@
 
 ## Benchmark
 ```
-$ crystal run --release benchmark/benchmark.cr                 
-      ecr 848.57k (  1.18µs) (± 1.14%)  4.25kB/op         fastest
-  to_html 222.15k (  4.50µs) (± 0.74%)  7.52kB/op    3.82× slower
-    water  62.77k ( 15.93µs) (± 0.72%)  11.5kB/op   13.52× slower
-blueprint 881.95  (  1.13ms) (±22.13%)  6.93MB/op  962.16× slower
+      ecr 875.25k (  1.14µs) (± 6.52%)  4.25kB/op          fastest
+  to_html 538.74k (  1.86µs) (± 1.15%)  5.34kB/op     1.62× slower
+    water  62.29k ( 16.05µs) (± 2.13%)  11.5kB/op    14.05× slower
+blueprint 828.39  (  1.21ms) (±21.01%)  6.56MB/op  1056.58× slower
 ```
