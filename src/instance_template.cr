@@ -70,6 +70,12 @@ module ToHtml
           {{io}} << "\n" unless %index == {{blk.body.receiver}}.size - 1
         {% end %}
       end
+    {% elsif blk.body.is_a?(Call) && blk.body.receiver && blk.body.name.stringify == "to_html" && blk.body.block %}
+      {{blk.body.receiver}}.to_html({{io}}, {{indent_level}}) do |%io, %indent_level|
+        ToHtml.to_html_eval_exps(%io, %indent_level) do
+          {{blk.body.block.body}}
+        end
+      end
     {% elsif blk.body.is_a?(If) %}
       if {{blk.body.cond}}
         {% if blk.body.then %}
