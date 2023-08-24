@@ -1,5 +1,4 @@
-require "./instance_template"
-require "./instance_tag_attrs"
+require "./to_html"
 
 macro instance_template(&blk)
   ToHtml.instance_template {{blk}}
