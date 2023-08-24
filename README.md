@@ -212,3 +212,5 @@ Execute `crystal run --release benchmark/benchmark.cr` to reproduce.
     water  62.29k ( 16.05µs) (± 2.13%)  11.5kB/op    14.05× slower
 blueprint 828.39  (  1.21ms) (±21.01%)  6.56MB/op  1056.58× slower
 ```
+
+Compared shards taken from [awesome-crystal](https://github.com/veelenga/awesome-crystal#html-builders)
