@@ -117,9 +117,9 @@ module ToHtml
     {% if flag?(:to_html_pretty) %}
       {{io}} << "  " * {{indent_level}}
     {% end %}
-    {% if call.args.empty? && !call.named_args && call.block.body.is_a?(StringLiteral) %}
+    {% if call.args.empty? && !call.named_args && call.block && call.block.body.is_a?(StringLiteral) %}
       {{io}} << {{"<" + call.name.stringify + ">" + call.block.body + "</" + call.name.stringify + ">"}}
-    {% elsif call.args.empty? && call.named_args && call.block.body.is_a?(StringLiteral) %}
+    {% elsif call.args.empty? && call.named_args && call.block && call.block.body.is_a?(StringLiteral) %}
       {{io}} << {{"<" + call.name.stringify + " " + call.named_args.map { |a| "#{a.name}=#{a.value}" }.join(" ") + ">" + call.block.body + "</" + call.name.stringify + ">"}}
     {% else %}
       {% if call.named_args && call.args.empty? %}
