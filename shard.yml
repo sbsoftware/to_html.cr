@@ -4,7 +4,7 @@ license: MIT
 authors:
   - Stefan Bilharz <stefan@sbsoftware.de>
 description: |
-  Define a fast `#to_html` method for any class via macros
+  The fastest HTML builder for Crystal you can get
 development_dependencies:
   blueprint:
     github: stephannv/blueprint
