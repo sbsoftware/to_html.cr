@@ -10,3 +10,5 @@ development_dependencies:
     github: stephannv/blueprint
   water:
     github: shootingfly/water
+  html_builder:
+    github: crystal-lang/html_builder
