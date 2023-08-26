@@ -3,6 +3,7 @@
 `to_html` is the fastest HTML builder library for Crystal you can get (see [Benchmark](#benchmark)).
 
 ![CI badge](https://github.com/sbsoftware/to_html.cr/actions/workflows/crystal.yml/badge.svg?event=push)
+![Weekly CI badge](https://github.com/sbsoftware/to_html.cr/actions/workflows/weekly_crystal.yml/badge.svg)
 
 The main idea behind this project is to be able to output HTML without leaving the Crystal syntax, as most templates need to contain logic and thus most other templating engines implement their own way of expressing such logic. Why not just use the tools we already have?
 
