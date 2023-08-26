@@ -69,7 +69,7 @@ end
 ```crystal
 require "to_html"
 
-class MyView
+class StaticInstanceView
   ToHtml.instance_template do
     h1 { "Hello World!" }
     p do
@@ -80,7 +80,7 @@ class MyView
   end
 end
 
-puts MyView.new.to_html
+puts StaticInstanceView.new.to_html
 ```
 
 ### Dynamic Instance Template
@@ -88,7 +88,7 @@ puts MyView.new.to_html
 ```crystal
 require "to_html"
 
-class MyView
+class DynamicInstanceView
   getter heading : String
 
   def initialize(@heading); end
@@ -103,7 +103,7 @@ class MyView
   end
 end
 
-puts MyView.new("Template!").to_html
+puts DynamicInstanceView.new("Template!").to_html
 ```
 
 ### Class template
@@ -111,7 +111,7 @@ puts MyView.new("Template!").to_html
 ```crystal
 require "to_html"
 
-class MyView
+class ClassView
   ToHtml.class_template do
     div do
       p { "This needs no instance" }
@@ -119,7 +119,7 @@ class MyView
   end
 end
 
-puts MyView.to_html
+puts ClassView.to_html
 ```
 
 ### Attributes
@@ -131,7 +131,7 @@ You can add attributes to your tags via named arguments to the calls.
 ```crystal
 require "to_html"
 
-class MyView
+class NamedArgumentsView
   ToHtml.instance_template do
     div class: "my-div" do
       form action: "https://www.example.com", method: "POST" do
@@ -144,7 +144,7 @@ class MyView
   end
 end
 
-puts MyView.new.to_html
+puts NamedArgumentsView.new.to_html
 ```
 
 #### Object Interface
@@ -153,7 +153,7 @@ Another way to add attributes is via objects that implement `#to_tag_attrs`. The
 This is still a bit experimental but the following example shows a few possible use cases, as well as the full potential of these macros.
 
 ```crystal
-class MyView
+class ObjectInterfaceView
   ToHtml.instance_template do
     div MyObject do
       form MyResource do
@@ -193,7 +193,7 @@ end
 #   </form>
 #   <a href="/my_resource">MyResource</a>
 # </div>
-puts MyView.new.to_html
+puts ObjectInterfaceView.new.to_html
 ```
 
 ### More
