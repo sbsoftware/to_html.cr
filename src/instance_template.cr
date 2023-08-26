@@ -57,7 +57,9 @@ module ToHtml
   end
 
   macro to_html_eval_exp(io, indent_level, break_line = true, &blk)
-    {% if blk.body.is_a?(Call) && ToHtml::TAG_NAMES.includes?(blk.body.name.stringify) %}
+    {% if blk.body.is_a?(Call) && ToHtml::VOID_TAG_NAMES.includes?(blk.body.name.stringify) %}
+      ToHtml.to_html_add_void_tag({{io}}, {{indent_level}}, {{break_line}}, {{blk.body}})
+    {% elsif blk.body.is_a?(Call) && ToHtml::TAG_NAMES.includes?(blk.body.name.stringify) %}
       ToHtml.to_html_add_tag({{io}}, {{indent_level}}, {{break_line}}, {{blk.body}})
     {% elsif blk.body.is_a?(Call) && blk.body.name.stringify == "doctype" %}
       {{io}} << "<!DOCTYPE {{blk.body.args.first.id}}>"
@@ -127,17 +129,17 @@ module ToHtml
       {% else %}
         %attr_hash = ToHtml::AttributeHash.new
 
-        {% if call.named_args %}
-          {% for named_arg in call.named_args %}
-            %attr_hash[{{named_arg.name.stringify}}] = {{named_arg.value}}.to_s
-          {% end %}
-        {% end %}
-
         {% for arg in call.args %}
           {% if arg.is_a?(TupleLiteral) %}
             %attr_hash[{{arg}}.first] = {{arg}}.last
           {% else %}
             {{arg}}.to_html_attrs({{call.name.stringify}}, %attr_hash)
+          {% end %}
+        {% end %}
+
+        {% if call.named_args %}
+          {% for named_arg in call.named_args %}
+            %attr_hash[{{named_arg.name.stringify}}] = {{named_arg.value}}.to_s
           {% end %}
         {% end %}
 
@@ -166,6 +168,41 @@ module ToHtml
       {% if flag?(:to_html_pretty) && break_line %}
         {{io}} << "\n"
       {% end %}
+    {% end %}
+  end
+
+  macro to_html_add_void_tag(io, indent_level, break_line, call)
+    {% if flag?(:to_html_pretty) %}
+      {{io}} << "  " * {{indent_level}}
+    {% end %}
+    {% if call.args.empty? && !call.named_args %}
+      {{io}} << "<{{call.name}}>"
+    {% elsif call.args.empty? && call.named_args %}
+      {{io}} << "<{{call.name}} " + {{ call.named_args.map { |a| "#{a.name}=#{a.value}" }.join(" ") }} + ">"
+    {% else %}
+      %attr_hash = ToHtml::AttributeHash.new
+
+      {% for arg in call.args %}
+        {% if arg.is_a?(TupleLiteral) %}
+          %attr_hash[{{arg}}.first] = {{arg}}.last
+        {% else %}
+          {{arg}}.to_html_attrs({{call.name.stringify}}, %attr_hash)
+        {% end %}
+      {% end %}
+
+      {% if call.named_args %}
+        {% for named_arg in call.named_args %}
+          %attr_hash[{{named_arg.name.stringify}}] = {{named_arg.value}}.to_s
+        {% end %}
+      {% end %}
+
+      {{io}} << "<{{call.name}}"
+      {{io}} << " " unless %attr_hash.empty?
+      {{io}} << %attr_hash
+      {{io}} << ">"
+    {% end %}
+    {% if flag?(:to_html_pretty) && break_line %}
+      {{io}} << "\n"
     {% end %}
   end
 end

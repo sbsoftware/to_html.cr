@@ -3,23 +3,19 @@ module ToHtml
     a
     abbr
     address
-    area
     article
     aside
     audio
     b
-    base
     bdi
     bdo
     blockquote
     body
-    br
     button
     canvas
     caption
     cite
     code
-    col
     colgroup
     data
     datalist
@@ -32,7 +28,6 @@ module ToHtml
     dl
     dt
     em
-    embed
     fieldset
     figcaption
     figure
@@ -46,23 +41,18 @@ module ToHtml
     h6
     head
     header
-    hr
     html
     i
     iframe
-    img
-    input
     ins
     kbd
     label
     legend
     li
-    link
     main
     map
     mark
     menu
-    meta
     meter
     nav
     noscript
@@ -72,7 +62,6 @@ module ToHtml
     option
     output
     p
-    param
     picture
     pre
     progress
@@ -86,7 +75,6 @@ module ToHtml
     section
     select
     small
-    source
     span
     strong
     style
@@ -105,11 +93,26 @@ module ToHtml
     time
     title
     tr
-    track
     u
     ul
     var
     video
+  ]
+
+  VOID_TAG_NAMES = %w[
+    area
+    base
+    br
+    col
+    embed
+    hr
+    img
+    input
+    link
+    meta
+    param
+    source
+    track
     wbr
   ]
 end

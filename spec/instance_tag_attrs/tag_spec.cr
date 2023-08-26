@@ -47,12 +47,12 @@ module ToHtml::InstanceTagAttrs::TagSpec
       expected = <<-HTML
       <div>
         <a href="https://www.example.com">
-          <img src="https://www.example.com/img.jpg" alt="An image of this"></img>
+          <img src="https://www.example.com/img.jpg" alt="An image of this">
         </a>
       </div>
       <div>
         <a href="https://example.com">
-          <img src="https://example.com/img.jpg" alt="Another image of this"></img>
+          <img src="https://example.com/img.jpg" alt="Another image of this">
         </a>
       </div>
       HTML
