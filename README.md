@@ -153,6 +153,8 @@ Another way to add attributes is via objects that implement `#to_tag_attrs`. The
 This is still a bit experimental but the following example shows a few possible use cases, as well as the full potential of these macros.
 
 ```crystal
+require "to_html"
+
 class ObjectInterfaceView
   ToHtml.instance_template do
     div MyObject do
