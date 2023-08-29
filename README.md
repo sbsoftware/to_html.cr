@@ -152,7 +152,7 @@ puts NamedArgumentsView.new.to_html
 
 #### Object Interface
 
-Another way to add attributes is via objects that implement `#to_tag_attrs`. The easiest way to do so is via the `ToHtml.instance_tag_attrs`/`ToHtml.class_tag_attrs` macros.
+Another way to add attributes is via objects that implement `#to_html_attrs`. The easiest way to do so is via the `ToHtml.instance_tag_attrs`/`ToHtml.class_tag_attrs` macros.
 This is still a bit experimental but the following example shows a few possible use cases, as well as the full potential of these macros.
 
 ```crystal
