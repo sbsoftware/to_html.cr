@@ -1,7 +1,10 @@
 require "./tag_names"
+require "./tag_typechecks"
 require "./attribute_hash"
 
 module ToHtml
+  extend TagTypechecks
+
   macro instance_template(&blk)
     def to_html(io, indent_level = 0)
       ToHtml.to_html_eval_exps(io, indent_level) {{blk}}
@@ -119,16 +122,19 @@ module ToHtml
 
   # :nodoc:
   macro to_html_add_tag(io, indent_level, break_line, call)
+    {% if call.named_args %}
+      ToHtml.{{ "#{call.name}_typecheck(#{call.named_args.splat})".id }}
+    {% end %}
     {% if flag?(:to_html_pretty) %}
       {{io}} << "  " * {{indent_level}}
     {% end %}
     {% if call.args.empty? && !call.named_args && call.block && call.block.body.is_a?(StringLiteral) %}
       {{io}} << {{"<" + ToHtml::TAG_NAMES[call.name.stringify] + ">" + call.block.body + "</" + ToHtml::TAG_NAMES[call.name.stringify] + ">"}}
     {% elsif call.args.empty? && call.named_args && call.named_args.all? { |arg| arg.value.is_a?(StringLiteral) } && call.block && call.block.body.is_a?(StringLiteral) %}
-      {{io}} << {{"<" + ToHtml::TAG_NAMES[call.name.stringify] + " " + call.named_args.map { |a| "#{a.name}=#{a.value}" }.join(" ") + ">" + call.block.body + "</" + ToHtml::TAG_NAMES[call.name.stringify] + ">"}}
+      {{io}} << {{"<" + ToHtml::TAG_NAMES[call.name.stringify] + " " + call.named_args.map { |a| "#{a.name}=#{a.value.id.stringify}" }.join(" ") + ">" + call.block.body + "</" + ToHtml::TAG_NAMES[call.name.stringify] + ">"}}
     {% else %}
       {% if call.named_args && call.args.empty? && call.named_args.all? { |arg| arg.value.is_a?(StringLiteral) } %}
-        {{io}} << {{"<" + ToHtml::TAG_NAMES[call.name.stringify] + " " + call.named_args.map { |a| "#{a.name}=#{a.value}" } .join(" ") + ">"}}
+        {{io}} << {{"<" + ToHtml::TAG_NAMES[call.name.stringify] + " " + call.named_args.map { |a| "#{a.name}=#{a.value.id.stringify}" } .join(" ") + ">"}}
       {% else %}
         %attr_hash = ToHtml::AttributeHash.new
 
@@ -183,13 +189,16 @@ module ToHtml
 
   # :nodoc:
   macro to_html_add_void_tag(io, indent_level, break_line, call)
+    {% if call.named_args %}
+      ToHtml.{{ "#{call.name}_typecheck(#{call.named_args.splat})".id }}
+    {% end %}
     {% if flag?(:to_html_pretty) %}
       {{io}} << "  " * {{indent_level}}
     {% end %}
     {% if call.args.empty? && !call.named_args %}
       {{io}} << "<{{call.name}}>"
     {% elsif call.args.empty? && call.named_args && call.named_args.all? { |arg| arg.value.is_a?(StringLiteral) } %}
-      {{io}} << "<{{call.name}} " + {{ call.named_args.map { |a| "#{a.name}=#{a.value}" }.join(" ") }} + ">"
+      {{io}} << "<{{call.name}} " + {{ call.named_args.map { |a| "#{a.name}=#{a.value.id.stringify}" }.join(" ") }} + ">"
     {% else %}
       %attr_hash = ToHtml::AttributeHash.new
 
