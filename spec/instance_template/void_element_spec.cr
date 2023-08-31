@@ -12,7 +12,8 @@ module ToHtml::InstanceTemplate::VoidElementSpec
         hr
         form action: "/inputs", method: "POST" do
           input MyInputField.new("foo"), placeholder: "bar"
-          input type: "submit", name: "submit", value: "Submit"
+          input type: "datetime-local", name: :our_date
+          input type: :submit, name: "submit", value: "Submit"
         end
       end
     end
@@ -55,6 +56,7 @@ module ToHtml::InstanceTemplate::VoidElementSpec
         <hr>
         <form action="/inputs" method="POST">
           <input type="text" name="name" value="foo" placeholder="bar">
+          <input type="datetime-local" name="our_date">
           <input type="submit" name="submit" value="Submit">
         </form>
       </div>
