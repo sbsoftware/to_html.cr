@@ -100,7 +100,7 @@ module ToHtml
     def footer_typecheck(**args)
     end
 
-    def form_typecheck(**args)
+    def form_typecheck(method : (AttrEnums::FormMethod | String)? = nil, **args)
     end
 
     def h1_typecheck(**args)
