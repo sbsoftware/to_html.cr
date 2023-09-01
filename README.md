@@ -200,6 +200,40 @@ end
 puts NamedArgumentsView.new.to_html
 ```
 
+#### Named Arguments with Symbols
+
+You can provide your attribute values as String or as Symbol. The latter will in some cases be subject to a typecheck against an Enum that contains values officially supported by the standard.
+
+As it is still your Symbol that is eventually used as the attribute value, this unfortunately doesn't work with keywords that contain a hyphen. You have to fall back to use a String if you want to use one of those.
+
+[The list of Enums](src/attr_enums) to check attribute values against is still small and will only grow over time. Feel free to contribute by opening a PR adding more.
+
+```crystal
+require "to_html"
+
+class SymbolNamedArgumentsView
+  ToHtml.instance_template do
+    form method: :get do
+      # this will compile
+      input type: :text
+      # this won't
+      input type: :foo
+      # but this will
+      input type: "foo"
+
+      # this is not valid crystal
+      input type: :datetime-local
+      # this will lead to a wrong attribute value and is therefore not part of the enum
+      input type: :datetime_local
+      # you need to do it this way
+      input type: "datetime-local"
+    end
+  end
+end
+
+puts SymbolNamedArgumentsView.new.to_html
+```
+
 #### Object Interface
 
 Another way to add attributes is via objects that implement `#to_html_attrs`. The easiest way to do so is via the `ToHtml.instance_tag_attrs`/`ToHtml.class_tag_attrs` macros.
