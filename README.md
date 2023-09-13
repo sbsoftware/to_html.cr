@@ -14,6 +14,7 @@ Another important core concept is that what can be known at compile-time should 
 - [Usage](#usage)
 - [Examples](#examples)
 - [Benchmark](#benchmark)
+- [Contributing](#contributing)
 
 ## Usage
 
@@ -220,3 +221,10 @@ html_builder  68.24k ( 14.66µs) (± 0.83%)  10.5kB/op    13.36× slower
 ```
 
 Compared shards taken from [awesome-crystal](https://github.com/veelenga/awesome-crystal#html-builders)
+
+## Contributing
+
+1. Fork this repository
+2. Read the [Contribution Guidelines](CONTRIBUTING.md)
+3. Create a branch with your desired changes
+4. Create a pull request
