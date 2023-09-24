@@ -50,6 +50,50 @@ class MyView
 end
 ```
 
+### Element Concatenation
+
+Just write your tag name calls and as many string literals as you want below each other - they will all be concatenated. You can also use control logic like `if`s and `#each`.
+
+```crystal
+require "to_html"
+
+class MyLongView
+  getter show_author : Bool
+  getter random_lines : Array(String)
+
+  def initialize(@show_author, @random_lines); end
+
+  ToHtml.instance_template do
+    div do
+      p do
+        "In the realm of code, so vast and wide,"
+        br
+        "An HTML div began its thrilling ride."
+        br
+        "With attributes unique, it came alive,"
+        br
+        "To journey through the web, it would strive."
+      end
+
+      if show_author
+        div class: "author" do
+          i { "ChatGPT" }
+        end
+      end
+
+      p do
+        random_lines.each do |random_line|
+          strong { random_line }
+          br
+        end
+      end
+    end
+  end
+end
+
+puts MyLongView.new(true, ["Test", "Blah", "Foo"]).to_html
+```
+
 ### Global Macros
 
 If you're sure you won't get any name clashes (or you don't care), you can `require "to_html/globals"` to get rid of the module name before calling the template macros.
