@@ -6,6 +6,22 @@ module ToHtml::InstanceTemplate::KwArgsSpec
       a href: "https://www.example.com" do
         "example.com"
       end
+      a href: Paths.some_uri do
+        "Test"
+      end
+      img src: Paths.other_uri
+    end
+  end
+
+  module Paths
+    extend self
+
+    def some_uri
+      "https://some.example.com"
+    end
+
+    def other_uri
+      "https://example.com/test.png"
     end
   end
 
@@ -13,8 +29,10 @@ module ToHtml::InstanceTemplate::KwArgsSpec
     it "should return the correct HTML" do
       view = MyView.new
 
-      expected = <<-HTML
+      expected = <<-HTML.squish
       <a href="https://www.example.com">example.com</a>
+      <a href="https://some.example.com">Test</a>
+      <img src="https://example.com/test.png">
       HTML
 
       view.to_html.should eq(expected.squish)

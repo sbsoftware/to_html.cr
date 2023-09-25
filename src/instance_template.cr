@@ -121,10 +121,10 @@ module ToHtml
     {% end %}
     {% if call.args.empty? && !call.named_args && call.block && call.block.body.is_a?(StringLiteral) %}
       {{io}} << {{"<" + call.name.stringify + ">" + call.block.body + "</" + call.name.stringify + ">"}}
-    {% elsif call.args.empty? && call.named_args && call.block && call.block.body.is_a?(StringLiteral) %}
+    {% elsif call.args.empty? && call.named_args && call.named_args.all? { |arg| arg.value.is_a?(StringLiteral) } && call.block && call.block.body.is_a?(StringLiteral) %}
       {{io}} << {{"<" + call.name.stringify + " " + call.named_args.map { |a| "#{a.name}=#{a.value}" }.join(" ") + ">" + call.block.body + "</" + call.name.stringify + ">"}}
     {% else %}
-      {% if call.named_args && call.args.empty? %}
+      {% if call.named_args && call.args.empty? && call.named_args.all? { |arg| arg.value.is_a?(StringLiteral) } %}
         {{io}} << {{"<" + call.name.stringify + " " + call.named_args.map { |a| "#{a.name}=#{a.value}" } .join(" ") + ">"}}
       {% else %}
         %attr_hash = ToHtml::AttributeHash.new
@@ -177,7 +177,7 @@ module ToHtml
     {% end %}
     {% if call.args.empty? && !call.named_args %}
       {{io}} << "<{{call.name}}>"
-    {% elsif call.args.empty? && call.named_args %}
+    {% elsif call.args.empty? && call.named_args && call.named_args.all? { |arg| arg.value.is_a?(StringLiteral) } %}
       {{io}} << "<{{call.name}} " + {{ call.named_args.map { |a| "#{a.name}=#{a.value}" }.join(" ") }} + ">"
     {% else %}
       %attr_hash = ToHtml::AttributeHash.new
