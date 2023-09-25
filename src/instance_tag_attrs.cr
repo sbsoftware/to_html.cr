@@ -11,6 +11,7 @@ module ToHtml
     end
   end
 
+  # :nodoc:
   macro to_html_attrs_eval_exps(&blk)
     {% if blk.body.is_a?(Expressions) %}
       {% for exp in blk.body.expressions %}
@@ -21,6 +22,7 @@ module ToHtml
     {% end %}
   end
 
+  # :nodoc:
   macro to_html_attrs_eval_exp(exp)
     {% if exp.is_a?(Assign) %}
       attr_hash[{{exp.target.stringify.gsub(/_/, "-")}}] = {{exp.value}}
