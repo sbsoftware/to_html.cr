@@ -1,4 +1,5 @@
 module ToHtml
+  # :nodoc:
   class AttributeHash
     getter attributes : Hash(String, String)
 

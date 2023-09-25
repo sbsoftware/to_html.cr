@@ -42,6 +42,7 @@ module ToHtml
     end
   end
 
+  # :nodoc:
   macro to_html_eval_exps(io, indent_level, &blk)
     {% if blk.body.is_a?(Expressions) %}
       {% for exp, index in blk.body.expressions %}
@@ -56,6 +57,7 @@ module ToHtml
     {% end %}
   end
 
+  # :nodoc:
   macro to_html_eval_exp(io, indent_level, break_line = true, &blk)
     {% if blk.body.is_a?(Call) && ToHtml::VOID_TAG_NAMES.includes?(blk.body.name.stringify) %}
       ToHtml.to_html_add_void_tag({{io}}, {{indent_level}}, {{break_line}}, {{blk.body}})
@@ -115,6 +117,7 @@ module ToHtml
     {% end %}
   end
 
+  # :nodoc:
   macro to_html_add_tag(io, indent_level, break_line, call)
     {% if flag?(:to_html_pretty) %}
       {{io}} << "  " * {{indent_level}}
@@ -171,6 +174,7 @@ module ToHtml
     {% end %}
   end
 
+  # :nodoc:
   macro to_html_add_void_tag(io, indent_level, break_line, call)
     {% if flag?(:to_html_pretty) %}
       {{io}} << "  " * {{indent_level}}
