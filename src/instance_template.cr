@@ -136,7 +136,14 @@ module ToHtml
           {% if arg.is_a?(TupleLiteral) %}
             %attr_hash[{{arg}}.first] = {{arg}}.last
           {% else %}
-            {{arg}}.to_html_attrs({{call.name.stringify}}, %attr_hash)
+            %arg = {{arg}}
+            if %arg.is_a?(Array)
+              %arg.each do |item|
+                item.to_html_attrs({{call.name.stringify}}, %attr_hash)
+              end
+            else
+              %arg.to_html_attrs({{call.name.stringify}}, %attr_hash)
+            end
           {% end %}
         {% end %}
 
@@ -190,7 +197,14 @@ module ToHtml
         {% if arg.is_a?(TupleLiteral) %}
           %attr_hash[{{arg}}.first] = {{arg}}.last
         {% else %}
-          {{arg}}.to_html_attrs({{call.name.stringify}}, %attr_hash)
+          %arg = {{arg}}
+          if %arg.is_a?(Array)
+            %arg.each do |item|
+              item.to_html_attrs({{call.name.stringify}}, %attr_hash)
+            end
+          else
+            %arg.to_html_attrs({{call.name.stringify}}, %attr_hash)
+          end
         {% end %}
       {% end %}
 
