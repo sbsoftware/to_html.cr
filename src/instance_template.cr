@@ -61,7 +61,7 @@ module ToHtml
   macro to_html_eval_exp(io, indent_level, break_line = true, &blk)
     {% if blk.body.is_a?(Call) && ToHtml::VOID_TAG_NAMES.includes?(blk.body.name.stringify) %}
       ToHtml.to_html_add_void_tag({{io}}, {{indent_level}}, {{break_line}}, {{blk.body}})
-    {% elsif blk.body.is_a?(Call) && ToHtml::TAG_NAMES.includes?(blk.body.name.stringify) %}
+    {% elsif blk.body.is_a?(Call) && ToHtml::TAG_NAMES.keys.includes?(blk.body.name.stringify) %}
       ToHtml.to_html_add_tag({{io}}, {{indent_level}}, {{break_line}}, {{blk.body}})
     {% elsif blk.body.is_a?(Call) && blk.body.name.stringify == "doctype" %}
       {{io}} << "<!DOCTYPE {{blk.body.args.first.id}}>"
@@ -123,12 +123,12 @@ module ToHtml
       {{io}} << "  " * {{indent_level}}
     {% end %}
     {% if call.args.empty? && !call.named_args && call.block && call.block.body.is_a?(StringLiteral) %}
-      {{io}} << {{"<" + call.name.stringify + ">" + call.block.body + "</" + call.name.stringify + ">"}}
+      {{io}} << {{"<" + ToHtml::TAG_NAMES[call.name.stringify] + ">" + call.block.body + "</" + ToHtml::TAG_NAMES[call.name.stringify] + ">"}}
     {% elsif call.args.empty? && call.named_args && call.named_args.all? { |arg| arg.value.is_a?(StringLiteral) } && call.block && call.block.body.is_a?(StringLiteral) %}
-      {{io}} << {{"<" + call.name.stringify + " " + call.named_args.map { |a| "#{a.name}=#{a.value}" }.join(" ") + ">" + call.block.body + "</" + call.name.stringify + ">"}}
+      {{io}} << {{"<" + ToHtml::TAG_NAMES[call.name.stringify] + " " + call.named_args.map { |a| "#{a.name}=#{a.value}" }.join(" ") + ">" + call.block.body + "</" + ToHtml::TAG_NAMES[call.name.stringify] + ">"}}
     {% else %}
       {% if call.named_args && call.args.empty? && call.named_args.all? { |arg| arg.value.is_a?(StringLiteral) } %}
-        {{io}} << {{"<" + call.name.stringify + " " + call.named_args.map { |a| "#{a.name}=#{a.value}" } .join(" ") + ">"}}
+        {{io}} << {{"<" + ToHtml::TAG_NAMES[call.name.stringify] + " " + call.named_args.map { |a| "#{a.name}=#{a.value}" } .join(" ") + ">"}}
       {% else %}
         %attr_hash = ToHtml::AttributeHash.new
 
@@ -139,10 +139,10 @@ module ToHtml
             %arg = {{arg}}
             if %arg.is_a?(Array)
               %arg.each do |item|
-                item.to_html_attrs({{call.name.stringify}}, %attr_hash)
+                item.to_html_attrs({{ToHtml::TAG_NAMES[call.name.stringify]}}, %attr_hash)
               end
             else
-              %arg.to_html_attrs({{call.name.stringify}}, %attr_hash)
+              %arg.to_html_attrs({{ToHtml::TAG_NAMES[call.name.stringify]}}, %attr_hash)
             end
           {% end %}
         {% end %}
@@ -153,7 +153,7 @@ module ToHtml
           {% end %}
         {% end %}
 
-        {{io}} << "<{{call.name}}"
+        {{io}} << "<{{ToHtml::TAG_NAMES[call.name.stringify].id}}"
         {{io}} << " " unless %attr_hash.empty?
         {{io}} << %attr_hash
         {{io}} << ">"
@@ -174,7 +174,7 @@ module ToHtml
           {% end %}
         {% end %}
       {% end %}
-      {{io}} << "</{{call.name}}>"
+      {{io}} << "</{{ToHtml::TAG_NAMES[call.name.stringify].id}}>"
       {% if flag?(:to_html_pretty) && break_line %}
         {{io}} << "\n"
       {% end %}

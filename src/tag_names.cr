@@ -1,103 +1,103 @@
 module ToHtml
-  TAG_NAMES = %w[
-    a
-    abbr
-    address
-    article
-    aside
-    audio
-    b
-    bdi
-    bdo
-    blockquote
-    body
-    button
-    canvas
-    caption
-    cite
-    code
-    colgroup
-    data
-    datalist
-    dd
-    del
-    details
-    dfn
-    dialog
-    div
-    dl
-    dt
-    em
-    fieldset
-    figcaption
-    figure
-    footer
-    form
-    h1
-    h2
-    h3
-    h4
-    h5
-    h6
-    head
-    header
-    html
-    i
-    iframe
-    ins
-    kbd
-    label
-    legend
-    li
-    main
-    map
-    mark
-    menu
-    meter
-    nav
-    noscript
-    object
-    ol
-    optgroup
-    option
-    output
-    p
-    picture
-    pre
-    progress
-    q
-    rp
-    rt
-    ruby
-    s
-    samp
-    script
-    section
-    select
-    small
-    span
-    strong
-    style
-    sub
-    summary
-    sup
-    svg
-    table
-    tbody
-    td
-    template
-    textarea
-    tfoot
-    th
-    thead
-    time
-    title
-    tr
-    u
-    ul
-    var
-    video
-  ]
+  TAG_NAMES = {
+    "a" => "a",
+    "abbr" => "abbr",
+    "address" => "address",
+    "article" => "article",
+    "aside" => "aside",
+    "audio" => "audio",
+    "b" => "b",
+    "bdi" => "bdi",
+    "bdo" => "bdo",
+    "blockquote" => "blockquote",
+    "body" => "body",
+    "button" => "button",
+    "canvas" => "canvas",
+    "caption" => "caption",
+    "cite" => "cite",
+    "code" => "code",
+    "colgroup" => "colgroup",
+    "data" => "data",
+    "datalist" => "datalist",
+    "dd" => "dd",
+    "del" => "del",
+    "details" => "details",
+    "dfn" => "dfn",
+    "dialog" => "dialog",
+    "div" => "div",
+    "dl" => "dl",
+    "dt" => "dt",
+    "em" => "em",
+    "fieldset" => "fieldset",
+    "figcaption" => "figcaption",
+    "figure" => "figure",
+    "footer" => "footer",
+    "form" => "form",
+    "h1" => "h1",
+    "h2" => "h2",
+    "h3" => "h3",
+    "h4" => "h4",
+    "h5" => "h5",
+    "h6" => "h6",
+    "head" => "head",
+    "header" => "header",
+    "html" => "html",
+    "i" => "i",
+    "iframe" => "iframe",
+    "ins" => "ins",
+    "kbd" => "kbd",
+    "label" => "label",
+    "legend" => "legend",
+    "li" => "li",
+    "main" => "main",
+    "map" => "map",
+    "mark" => "mark",
+    "menu" => "menu",
+    "meter" => "meter",
+    "nav" => "nav",
+    "noscript" => "noscript",
+    "object" => "object",
+    "ol" => "ol",
+    "optgroup" => "optgroup",
+    "option" => "option",
+    "output" => "output",
+    "p" => "p",
+    "picture" => "picture",
+    "pre" => "pre",
+    "progress" => "progress",
+    "q" => "q",
+    "rp" => "rp",
+    "rt" => "rt",
+    "ruby" => "ruby",
+    "s" => "s",
+    "samp" => "samp",
+    "script" => "script",
+    "section" => "section",
+    "select_tag" => "select",
+    "small" => "small",
+    "span" => "span",
+    "strong" => "strong",
+    "style" => "style",
+    "sub" => "sub",
+    "summary" => "summary",
+    "sup" => "sup",
+    "svg" => "svg",
+    "table" => "table",
+    "tbody" => "tbody",
+    "td" => "td",
+    "template" => "template",
+    "textarea" => "textarea",
+    "tfoot" => "tfoot",
+    "th" => "th",
+    "thead" => "thead",
+    "time" => "time",
+    "title" => "title",
+    "tr" => "tr",
+    "u" => "u",
+    "ul" => "ul",
+    "var" => "var",
+    "video" => "video"
+  }
 
   VOID_TAG_NAMES = %w[
     area
