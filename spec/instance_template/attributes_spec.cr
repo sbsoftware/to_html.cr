@@ -3,6 +3,7 @@ require "../spec_helper"
 module ToHtml::InstanceTemplate::AttributesSpec
   class MyView
     SPECIAL_CSS_CLASSES = [MyCssClass, MyOtherCssClass]
+    DEFAULT_VALUE = "two"
 
     ToHtml.instance_template do
       div MyCssClass, MyOtherCssClass, {"class", "so-unique"}, more_css_classes do
@@ -11,6 +12,17 @@ module ToHtml::InstanceTemplate::AttributesSpec
         div MyStimulusController do
           p({"class", "so-special"}) do
             "Some content"
+          end
+        end
+      end
+
+      fieldset do
+        label for: SomeId.to_s do
+          "Options"
+        end
+        select_tag id: SomeId.to_s, name: "myselect" do
+          ["one", "two", "three"].each do |val|
+            option(value: val, selected: val == DEFAULT_VALUE) { val }
           end
         end
       end
@@ -52,6 +64,12 @@ module ToHtml::InstanceTemplate::AttributesSpec
     end
   end
 
+  class SomeId
+    def self.to_s
+      "some-id"
+    end
+  end
+
   describe "When a template provides object parameters to a tag call" do
     describe "MyView#to_html" do
       it "should return the correct HTML" do
@@ -65,6 +83,14 @@ module ToHtml::InstanceTemplate::AttributesSpec
             <p class="so-special">Some content</p>
           </div>
         </div>
+        <fieldset>
+          <label for="some-id">Options</label>
+          <select id="some-id" name="myselect">
+            <option value="one">one</option>
+            <option value="two" selected>two</option>
+            <option value="three">three</option>
+          </select>
+        </fieldset>
         HTML
 
         view.to_html.should eq(expected.squish)
