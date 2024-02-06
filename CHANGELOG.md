@@ -1,3 +1,16 @@
+# v1.0.4
+
+## Features
+* Boolean attributes
+
+## Bugs
+* `select` tag method conflicts with Crystal `select` statement
+
+# v1.0.3
+
+## Features
+* Tag methods support array arguments
+
 # v1.0.2
 
 * Fix method calls in named arg values
