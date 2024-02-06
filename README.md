@@ -43,6 +43,11 @@ class MyView
        body do
          main do
            p { "Tada!" }
+           # special case: `select` is a reserved keyword in crystal; need to use `select_tag` instead
+           select_tag do
+             option(value: "one") { "One" }
+             option(value: "two", selected: true) { "Two" }
+           end
          end
        end
     end
