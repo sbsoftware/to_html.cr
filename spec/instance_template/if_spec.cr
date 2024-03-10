@@ -11,7 +11,12 @@ module ToHtml::InstanceTemplate::IfSpec
 
     ToHtml.instance_template do
       if switch
-        p { "Hooray!" }
+        # nested ifs should work, too
+        if !!switch
+          if true && switch
+            p { "Hooray!" }
+          end
+        end
       end
       div do
         if switch

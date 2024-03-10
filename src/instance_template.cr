@@ -82,7 +82,7 @@ module ToHtml
       end
     {% elsif blk.body.is_a?(If) %}
       if {{blk.body.cond}}
-        {% if blk.body.then %}
+        {% if !blk.body.then.nil? %}
           ToHtml.to_html_eval_exps({{io}}, {{indent_level}}) do
             {{blk.body.then}}
           end
@@ -90,7 +90,7 @@ module ToHtml
             {{io}} << "\n"
           {% end %}
         {% end %}
-      {% if blk.body.else %}
+      {% if !blk.body.else.nil? %}
         else
           ToHtml.to_html_eval_exps({{io}}, {{indent_level}}) do
             {{blk.body.else}}
