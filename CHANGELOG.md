@@ -1,3 +1,8 @@
+# v1.0.5
+
+## Bugs
+* Nested ifs are not evaluated
+
 # v1.0.4
 
 ## Features
