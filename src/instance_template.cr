@@ -149,7 +149,7 @@ module ToHtml
 
         {% if call.named_args %}
           {% for named_arg in call.named_args %}
-            %attr_hash[{{named_arg.name.stringify}}] = {{named_arg.value}}.to_s
+            %attr_hash[{{named_arg.name.stringify}}] = {{named_arg.value}}
           {% end %}
         {% end %}
 
@@ -210,7 +210,7 @@ module ToHtml
 
       {% if call.named_args %}
         {% for named_arg in call.named_args %}
-          %attr_hash[{{named_arg.name.stringify}}] = {{named_arg.value}}.to_s
+          %attr_hash[{{named_arg.name.stringify}}] = {{named_arg.value}}
         {% end %}
       {% end %}
 

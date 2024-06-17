@@ -21,10 +21,13 @@ module ToHtml::InstanceTemplate::AttributesSpec
           "Options"
         end
         select_tag id: SomeId.to_s, name: "myselect" do
+          option(value: "", selected: false) { "-" }
           ["one", "two", "three"].each do |val|
             option(value: val, selected: val == DEFAULT_VALUE) { val }
           end
         end
+        input name: "name", type: "text", required: true
+        input name: "surname", type: "text", required: false
       end
     end
 
@@ -86,10 +89,13 @@ module ToHtml::InstanceTemplate::AttributesSpec
         <fieldset>
           <label for="some-id">Options</label>
           <select id="some-id" name="myselect">
+            <option value="">-</option>
             <option value="one">one</option>
             <option value="two" selected>two</option>
             <option value="three">three</option>
           </select>
+          <input name="name" type="text" required>
+          <input name="surname" type="text">
         </fieldset>
         HTML
 
