@@ -8,7 +8,7 @@ module ToHtml::InstanceTemplate::AttributesSpec
     ToHtml.instance_template do
       div MyCssClass, MyOtherCssClass, {"class", "so-unique"}, more_css_classes do
         span(SPECIAL_CSS_CLASSES) { "Blah" }
-        img SPECIAL_CSS_CLASSES, more_css_classes
+        img SPECIAL_CSS_CLASSES, more_css_classes, {"class", nil}
         div MyStimulusController do
           p({"class", "so-special"}) do
             "Some content"

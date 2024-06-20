@@ -17,7 +17,7 @@ module ToHtml
 
     def []=(key, value)
       if attributes.has_key?(key)
-        attributes[key] += " #{value}"
+        attributes[key] += " #{value}" if value
       else
         attributes[key] = value.to_s
       end
