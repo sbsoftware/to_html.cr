@@ -19,7 +19,7 @@ module ToHtml
       if attributes.has_key?(key)
         attributes[key] += " #{value}"
       else
-        attributes[key] = value
+        attributes[key] = value.to_s
       end
     end
 

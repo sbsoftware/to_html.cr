@@ -17,10 +17,10 @@ module ToHtml::InstanceTemplate::AttributesSpec
       end
 
       fieldset do
-        label for: SomeId.to_s do
+        label for: SomeId do
           "Options"
         end
-        select_tag id: SomeId.to_s, name: "myselect" do
+        select_tag id: SomeId, name: "myselect" do
           option(value: "", selected: false) { "-" }
           ["one", "two", "three"].each do |val|
             option(value: val, selected: val == DEFAULT_VALUE) { val }
