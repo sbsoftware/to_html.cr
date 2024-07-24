@@ -16,31 +16,43 @@ module ToHtml::InstanceTemplate::ChainedMethodCallsSpec
         span { "Age" }
         span { my_model.age }
       end
+      div do
+        span { "Form" }
+        span { my_model.form }
+      end
+      div do
+        span { "Input" }
+        span { my_model.input }
+      end
     end
   end
 
-  record MyModel, name : String, age : Int32
+  record MyModel, name : String, age : Int32, form : String, input : String
 
   describe "MyView#to_html" do
     it "should return the correct HTML" do
-      view = MyView.new(MyModel.new("Stefan", 36))
+      view = MyView.new(MyModel.new("Stefan", 36, "final", "important!"))
 
-      expected = <<-HTML
+      expected = <<-HTML.squish
       <div>
         <span>Name</span>
-        <span>
-          Stefan
-        </span>
+        <span>Stefan</span>
       </div>
       <div>
         <span>Age</span>
-        <span>
-          36
-        </span>
+        <span>36</span>
+      </div>
+      <div>
+        <span>Form</span>
+        <span>final</span>
+      </div>
+      <div>
+        <span>Input</span>
+        <span>important!</span>
       </div>
       HTML
 
-      view.to_html.should eq(expected.squish)
+      view.to_html.should eq(expected)
     end
   end
 end
