@@ -59,11 +59,11 @@ module ToHtml
 
   # :nodoc:
   macro to_html_eval_exp(io, indent_level, break_line = true, &blk)
-    {% if blk.body.is_a?(Call) && ToHtml::VOID_TAG_NAMES.includes?(blk.body.name.stringify) %}
+    {% if blk.body.is_a?(Call) && blk.body.receiver.nil? && ToHtml::VOID_TAG_NAMES.includes?(blk.body.name.stringify) %}
       ToHtml.to_html_add_void_tag({{io}}, {{indent_level}}, {{break_line}}, {{blk.body}})
-    {% elsif blk.body.is_a?(Call) && ToHtml::TAG_NAMES.keys.includes?(blk.body.name.stringify) %}
+    {% elsif blk.body.is_a?(Call) && blk.body.receiver.nil? && ToHtml::TAG_NAMES.keys.includes?(blk.body.name.stringify) %}
       ToHtml.to_html_add_tag({{io}}, {{indent_level}}, {{break_line}}, {{blk.body}})
-    {% elsif blk.body.is_a?(Call) && blk.body.name.stringify == "doctype" %}
+    {% elsif blk.body.is_a?(Call) && blk.body.receiver.nil? && blk.body.name.stringify == "doctype" %}
       {{io}} << "<!DOCTYPE {{blk.body.args.first.id}}>"
     {% elsif blk.body.is_a?(Call) && blk.body.receiver && blk.body.name.stringify == "each" %}
       {{blk.body.receiver}}.each_with_index do {% if !blk.body.block.args.empty? %} |{{blk.body.block.args.splat}}, %index| {% end %}
