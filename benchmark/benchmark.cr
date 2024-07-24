@@ -32,9 +32,9 @@ to_html_output = normalize(to_html.to_html)
 end
 
 Benchmark.ips do |x|
-  x.report("ecr") { ecr.to_s }
-  x.report("to_html") { to_html.to_html }
-  x.report("html_builder") { html_builder.to_s }
-  x.report("water") { water.to_html }
-  x.report("blueprint") { blueprint.to_html }
+  x.report("ecr") { ToHtml::Benchmark::EcrTemplate.new.to_s }
+  x.report("to_html") { ToHtml::Benchmark::ToHtmlTemplate.new.to_html }
+  x.report("blueprint") { ToHtml::Benchmark::BlueprintTemplate.new.to_html }
+  x.report("html_builder") { ToHtml::Benchmark::HtmlBuilderTemplate.new.to_s }
+  x.report("water") { ToHtml::Benchmark::WaterTemplate.new.to_html }
 end
