@@ -12,7 +12,7 @@ water = ToHtml::Benchmark::WaterTemplate.new
 html_builder = ToHtml::Benchmark::HtmlBuilderTemplate.new
 
 def normalize(input)
-  input.split(/\n\s*/).join
+  input.gsub(/'/, "\"").split(/\n\s*/).join
 end
 
 to_html_output = normalize(to_html.to_html)
