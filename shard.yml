@@ -12,3 +12,5 @@ development_dependencies:
     github: shootingfly/water
   html_builder:
     github: crystal-lang/html_builder
+  markout:
+    github: GrottoPress/markout
