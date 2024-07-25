@@ -7,7 +7,7 @@ module ToHtml::InstanceTemplate::AttributesSpec
 
     ToHtml.instance_template do
       div MyCssClass, MyOtherCssClass, {"class", "so-unique"}, more_css_classes do
-        span(SPECIAL_CSS_CLASSES) { "Blah" }
+        span(SPECIAL_CSS_CLASSES, {class: "moo"}) { "Blah" }
         img SPECIAL_CSS_CLASSES, more_css_classes, {"class", nil}
         div MyStimulusController do
           p({"class", "so-special"}) do
@@ -80,7 +80,7 @@ module ToHtml::InstanceTemplate::AttributesSpec
 
         expected = <<-HTML
         <div class="my-css-class my-other-css-class so-unique my-third-css-class that-other-css-class">
-          <span class="my-css-class my-other-css-class">Blah</span>
+          <span class="my-css-class my-other-css-class moo">Blah</span>
           <img class="my-css-class my-other-css-class my-third-css-class that-other-css-class">
           <div data-controller="my" data-action="click->handle_click()">
             <p class="so-special">Some content</p>
