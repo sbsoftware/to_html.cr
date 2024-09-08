@@ -9,6 +9,7 @@ require "./markout"
 to_html = ToHtml::Benchmark::ToHtmlTemplate.new
 ecr = ToHtml::Benchmark::EcrTemplate.new
 blueprint = ToHtml::Benchmark::BlueprintTemplate.new
+raw_blueprint = ToHtml::Benchmark::RawBlueprintTemplate.new
 water = ToHtml::Benchmark::WaterTemplate.new
 html_builder = ToHtml::Benchmark::HtmlBuilderTemplate.new
 markout = ToHtml::Benchmark::MarkoutTemplate.new
@@ -22,6 +23,7 @@ to_html_output = normalize(to_html.to_html)
 {
   "ecr" => normalize(ecr.to_s),
   "blueprint" => normalize(blueprint.to_html),
+  "raw_blueprint" => normalize(raw_blueprint.to_html),
   "water" => normalize(water.to_html),
   "html_builder" => normalize(html_builder.to_s),
   "markout" => normalize(markout.to_s)
@@ -37,6 +39,7 @@ end
 Benchmark.ips do |x|
   x.report("ecr") { ToHtml::Benchmark::EcrTemplate.new.to_s }
   x.report("to_html") { ToHtml::Benchmark::ToHtmlTemplate.new.to_html }
+  x.report("raw blueprint") { ToHtml::Benchmark::RawBlueprintTemplate.new.to_html }
   x.report("blueprint") { ToHtml::Benchmark::BlueprintTemplate.new.to_html }
   x.report("html_builder") { ToHtml::Benchmark::HtmlBuilderTemplate.new.to_s }
   x.report("water") { ToHtml::Benchmark::WaterTemplate.new.to_html }
