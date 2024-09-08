@@ -2,7 +2,7 @@ version: 2.0
 shards:
   blueprint:
     git: https://github.com/stephannv/blueprint.git
-    version: 0.4.0
+    version: 0.6.0
 
   html_builder:
     git: https://github.com/crystal-lang/html_builder.git
