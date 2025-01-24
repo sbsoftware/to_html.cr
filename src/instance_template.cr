@@ -100,6 +100,9 @@ module ToHtml
           {% end %}
       {% end %}
       end
+    {% elsif blk.body.is_a?(Assign) %}
+      # Don't print this to the IO
+      {{blk.body}}
     {% elsif blk.body.is_a?(Yield) %}
       yield {{io}}, {{indent_level}}
     {% elsif blk.body.is_a?(Nop) %}
