@@ -80,6 +80,18 @@ module ToHtml
           {{blk.body.block.body}}
         end
       end
+    {% elsif blk.body.is_a?(Call) && blk.body.name.stringify == "super" && blk.body.block %}
+      super do
+        ToHtml.to_html_eval_exps({{io}}, {{indent_level}}) do
+          {{blk.body.block.body}}
+        end
+      end
+    {% elsif blk.body.is_a?(Call) && blk.body.name.stringify == "previous_def" && blk.body.block %}
+      previous_def do
+        ToHtml.to_html_eval_exps({{io}}, {{indent_level}}) do
+          {{blk.body.block.body}}
+        end
+      end
     {% elsif blk.body.is_a?(If) %}
       if {{blk.body.cond}}
         {% if !blk.body.then.nil? %}
