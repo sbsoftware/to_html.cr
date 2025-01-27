@@ -1,6 +1,5 @@
 require "spec"
-require "../src/instance_template"
-require "../src/instance_tag_attrs"
+require "../src/to_html"
 
 # TODO: Move that to some util shard or maybe that even exists already
 class String
