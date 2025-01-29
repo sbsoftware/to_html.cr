@@ -23,9 +23,25 @@ module ToHtml::LayoutSpec
     end
   end
 
+  class MyScript
+    ToHtml.class_template do
+      script do
+        <<-JS
+        console.log("Hello World!");
+        JS
+      end
+    end
+  end
+
   class MyId
     ToHtml.class_tag_attrs do
       id = "the-id"
+    end
+  end
+
+  class OtherAttrs
+    ToHtml.class_tag_attrs do
+      style = "background-color: red;"
     end
   end
 
@@ -35,7 +51,9 @@ module ToHtml::LayoutSpec
     delegate :window_title, to: something
 
     add_to_head MyStyle
+    add_to_head MyScript
     body_attributes MyId
+    body_attributes OtherAttrs
 
     ToHtml.instance_template do
       super do
@@ -60,8 +78,11 @@ module ToHtml::LayoutSpec
             background-color: #EEEEEE;
           }
           </style>
+          <script>
+          console.log("Hello World!");
+          </script>
         </head>
-        <body id="the-id">
+        <body id="the-id" style="background-color: red;">
           <div>42</div>
         </body>
       </html>

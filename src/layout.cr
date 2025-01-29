@@ -35,7 +35,7 @@ module ToHtml
 
     macro add_to_head(*objs)
       def head_children
-        {% if @type.methods.map(&.name).includes?("head_children") %}
+        {% if @type.methods.map(&.name).includes?("head_children".id) %}
           previous_def + Tuple.new({{objs.splat}})
         {% else %}
           super + Tuple.new({{objs.splat}})
@@ -49,7 +49,7 @@ module ToHtml
 
     macro body_attributes(*objs)
       def _body_attributes
-        {% if @type.methods.map(&.name).includes?("_body_attributes") %}
+        {% if @type.methods.map(&.name).includes?("_body_attributes".id) %}
           previous_def + Tuple.new({{objs.splat}})
         {% else %}
           super + Tuple.new({{objs.splat}})
