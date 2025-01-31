@@ -2,7 +2,7 @@ version: 2.0
 shards:
   blueprint:
     git: https://github.com/stephannv/blueprint.git
-    version: 0.4.0
+    version: 1.0.0
 
   html_builder:
     git: https://github.com/crystal-lang/html_builder.git
@@ -10,7 +10,7 @@ shards:
 
   markout:
     git: https://github.com/grottopress/markout.git
-    version: 1.0.0
+    version: 1.1.0
 
   water:
     git: https://github.com/shootingfly/water.git
