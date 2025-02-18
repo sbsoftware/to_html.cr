@@ -43,6 +43,16 @@ module ToHtml
       end
     end
 
+    macro prepend_to_head(*objs)
+      def head_children
+        {% if @type.methods.map(&.name).includes?("head_children".id) %}
+          Tuple.new({{objs.splat}}) + previous_def
+        {% else %}
+          Tuple.new({{objs.splat}}) + super
+        {% end %}
+      end
+    end
+
     def _body_attributes
       Tuple.new
     end

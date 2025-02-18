@@ -51,7 +51,7 @@ module ToHtml::LayoutSpec
     delegate :window_title, to: something
 
     append_to_head MyStyle
-    append_to_head MyScript
+    prepend_to_head MyScript
     body_attributes MyId
     body_attributes OtherAttrs
 
@@ -73,14 +73,14 @@ module ToHtml::LayoutSpec
         <head>
           <title>Surprise!</title>
           <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+          <script>
+          console.log("Hello World!");
+          </script>
           <style>
           body {
             background-color: #EEEEEE;
           }
           </style>
-          <script>
-          console.log("Hello World!");
-          </script>
         </head>
         <body id="the-id" style="background-color: red;">
           <div>42</div>
