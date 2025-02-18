@@ -50,8 +50,8 @@ module ToHtml::LayoutSpec
 
     delegate :window_title, to: something
 
-    add_to_head MyStyle
-    add_to_head MyScript
+    append_to_head MyStyle
+    append_to_head MyScript
     body_attributes MyId
     body_attributes OtherAttrs
 

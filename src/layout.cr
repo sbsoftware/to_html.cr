@@ -33,7 +33,7 @@ module ToHtml
       Tuple.new
     end
 
-    macro add_to_head(*objs)
+    macro append_to_head(*objs)
       def head_children
         {% if @type.methods.map(&.name).includes?("head_children".id) %}
           previous_def + Tuple.new({{objs.splat}})
