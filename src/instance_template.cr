@@ -112,6 +112,16 @@ module ToHtml
           {% end %}
       {% end %}
       end
+    {% elsif blk.body.is_a?(MacroIf) %}
+      \{% if {{blk.body.cond}} %}
+        ToHtml.to_html_eval_exps({{io}}, {{indent_level}}) do
+          {{blk.body.then}}
+        end
+      \{% else %}
+        ToHtml.to_html_eval_exps({{io}}, {{indent_level}}) do
+          {{blk.body.else}}
+        end
+      \{% end %}
     {% elsif blk.body.is_a?(MacroFor) %}
       \{% for {{blk.body.vars.splat}} in {{blk.body.exp}} %}
         ToHtml.to_html_eval_exps({{io}}, {{indent_level}}) do
