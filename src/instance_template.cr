@@ -112,6 +112,13 @@ module ToHtml
           {% end %}
       {% end %}
       end
+    {% elsif blk.body.is_a?(MacroFor) %}
+      \{% for {{blk.body.vars.splat}} in {{blk.body.exp}} %}
+        ToHtml.to_html_eval_exps({{io}}, {{indent_level}}) do
+          # Crystal seems to insert a newline after each macro variable for some reason
+          {{blk.body.body.stringify.gsub(/\n/, "").id}}
+        end
+      \{% end %}
     {% elsif blk.body.is_a?(Assign) %}
       # Don't print this to the IO
       {{blk.body}}
