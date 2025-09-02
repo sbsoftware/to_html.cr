@@ -10,7 +10,7 @@ shards:
 
   markout:
     git: https://github.com/grottopress/markout.git
-    version: 1.1.0
+    version: 1.1.2
 
   water:
     git: https://github.com/shootingfly/water.git
