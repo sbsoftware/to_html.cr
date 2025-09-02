@@ -38,7 +38,7 @@ Benchmark.ips do |x|
   x.report("ecr") { ToHtml::Benchmark::EcrTemplate.new.to_s }
   x.report("to_html") { ToHtml::Benchmark::ToHtmlTemplate.new.to_html }
   x.report("blueprint") { ToHtml::Benchmark::BlueprintTemplate.new.to_s }
+  x.report("markout") { ToHtml::Benchmark::MarkoutTemplate.new.to_s }
   x.report("html_builder") { ToHtml::Benchmark::HtmlBuilderTemplate.new.to_s }
   x.report("water") { ToHtml::Benchmark::WaterTemplate.new.to_html }
-  x.report("markout") { ToHtml::Benchmark::MarkoutTemplate.new.to_s }
 end
