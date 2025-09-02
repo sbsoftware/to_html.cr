@@ -129,6 +129,8 @@ module ToHtml
           {{blk.body.body.stringify.gsub(/\n/, "").id}}
         end
       \{% end %}
+    {% elsif blk.body.is_a?(MacroExpression) || blk.body.is_a?(MacroLiteral) %}
+      {{blk.body}}
     {% elsif blk.body.is_a?(Assign) %}
       # Don't print this to the IO
       {{blk.body}}
