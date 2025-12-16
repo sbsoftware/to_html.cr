@@ -223,7 +223,7 @@ module ToHtml
     def section_typecheck(**args)
     end
 
-    def select_typecheck(**args)
+    def select_tag_typecheck(**args)
     end
 
     def small_typecheck(**args)

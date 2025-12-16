@@ -32,7 +32,7 @@ module ToHtml::InstanceTemplate::YieldSpec
     it "should return the correct HTML" do
       layout = Layout.new("Hi")
 
-      expected = <<-HTML
+      expected = <<-HTML.squish
       <html>
         <head>
           <title>
@@ -48,7 +48,7 @@ module ToHtml::InstanceTemplate::YieldSpec
 
       layout.to_html do |io, indent_level|
         View.to_html(io, indent_level)
-      end.should eq(expected.squish)
+      end.should eq(expected)
     end
   end
 end
