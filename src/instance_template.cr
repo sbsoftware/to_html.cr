@@ -125,8 +125,20 @@ module ToHtml
     {% elsif blk.body.is_a?(MacroFor) %}
       \{% for {{blk.body.vars.splat}} in {{blk.body.exp}} %}
         ToHtml.to_html_eval_exps({{io}}, {{indent_level}}) do
-          # Crystal seems to insert a newline after each macro variable for some reason
-          {{blk.body.body.stringify.gsub(/\n/, "").id}}
+          # Crystal can turn inline macro expressions (`{{...}}`) inside a macro-for body into
+          # "line-based" output (newlines around the expansion), which breaks calls without
+          # parentheses (e.g. `name:\n"value"\n, value:`). We keep real statement newlines, but
+          # collapse the ones that can't be statement separators.
+          #
+          # Upstream: https://github.com/crystal-lang/crystal/issues/16544
+          {%
+            body = blk.body.body.stringify
+              .gsub(/\s*\n\s*,\s*/, ", ")
+              .gsub(/\s*\n\s*\./, ".")
+              .gsub(/\s*\n\s*do\b/, " do")
+              .gsub(/([:,(\[{=])\s*\n\s*/, "\\1 ")
+          %}
+          {{body.id}}
         end
       \{% end %}
     {% elsif blk.body.is_a?(MacroExpression) || blk.body.is_a?(MacroLiteral) %}
@@ -162,7 +174,7 @@ module ToHtml
       {{io}} << {{"<" + ToHtml::TAG_NAMES[call.name.stringify] + " " + call.named_args.map { |a| "#{a.name}=#{a.value}" }.join(" ") + ">" + call.block.body + "</" + ToHtml::TAG_NAMES[call.name.stringify] + ">"}}
     {% else %}
       {% if call.named_args && call.args.empty? && call.named_args.all? { |arg| arg.value.is_a?(StringLiteral) } %}
-        {{io}} << {{"<" + ToHtml::TAG_NAMES[call.name.stringify] + " " + call.named_args.map { |a| "#{a.name}=#{a.value}" } .join(" ") + ">"}}
+        {{io}} << {{"<" + ToHtml::TAG_NAMES[call.name.stringify] + " " + call.named_args.map { |a| "#{a.name}=#{a.value}" }.join(" ") + ">"}}
       {% else %}
         %attr_hash = ToHtml::AttributeHash.new
 
