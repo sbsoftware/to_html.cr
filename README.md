@@ -175,6 +175,57 @@ end
 puts ClassView.to_html
 ```
 
+### Compile-time Control Flow (MacroIf / MacroFor)
+
+In addition to runtime `if`/`#each`, you can also use Crystal's macro control flow (`{% if %}` / `{% for %}`) inside templates. This runs at compile-time and can be used to generate markup based on compile-time information such as compiler flags or `@type`.
+
+#### `MacroIf` (`{% if %}`)
+
+```crystal
+require "to_html"
+
+class BuildVariantView
+  ToHtml.class_template do
+    head do
+      {% if flag?(:release) %}
+        script src: "/assets/app.min.js"
+      {% else %}
+        script src: "/assets/app.js"
+      {% end %}
+    end
+  end
+end
+
+puts BuildVariantView.to_html
+```
+
+#### `MacroFor` (`{% for %}`)
+
+```crystal
+require "to_html"
+
+class AutoFormView
+  getter first_name : String
+  getter last_name : String
+
+  def initialize(@first_name, @last_name); end
+
+  ToHtml.instance_template do
+    form do
+      {% for ivar in @type.instance_vars %}
+        label for: {{ivar.name.stringify}} do
+          {{ivar.name.stringify}}
+        end
+
+        input type: :text, name: {{ivar.name.stringify}}, value: {{ivar.name.id}}
+      {% end %}
+    end
+  end
+end
+
+puts AutoFormView.new(first_name: "Ada", last_name: "Lovelace").to_html
+```
+
 ### Attributes
 
 #### Named Arguments
