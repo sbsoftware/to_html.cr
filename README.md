@@ -313,12 +313,12 @@ Have a look into the `benchmark/` folder to find out how these numbers were dete
 Execute `crystal run --release benchmark/benchmark.cr` to reproduce.
 
 ```
-         ecr   1.55M (643.71ns) (± 3.02%)  4.27kB/op        fastest
-     to_html 884.07k (  1.13µs) (± 3.45%)  5.52kB/op   1.76× slower
-   blueprint 457.54k (  2.19µs) (± 3.70%)   4.9kB/op   3.40× slower
-     markout 191.89k (  5.21µs) (± 3.37%)  8.08kB/op   8.10× slower
-html_builder  59.03k ( 16.94µs) (± 3.86%)  10.4kB/op  26.32× slower
-       water  57.48k ( 17.40µs) (± 4.22%)  11.2kB/op  27.03× slower
+         ecr 999.84k (  1.00µs) (± 6.97%)  4.27kB/op        fastest
+     to_html 576.96k (  1.73µs) (± 7.51%)  5.52kB/op   1.73× slower
+   blueprint 377.61k (  2.65µs) (± 8.35%)   4.9kB/op   2.65× slower
+     markout 120.59k (  8.29µs) (± 8.54%)  8.08kB/op   8.29× slower
+html_builder  49.94k ( 20.02µs) (± 7.38%)  10.4kB/op  20.02× slower
+       water  46.83k ( 21.35µs) (± 8.31%)  11.2kB/op  21.35× slower
 ```
 
 Compared shards taken from [awesome-crystal](https://github.com/veelenga/awesome-crystal#html-builders)
