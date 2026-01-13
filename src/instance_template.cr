@@ -125,20 +125,7 @@ module ToHtml
     {% elsif blk.body.is_a?(MacroFor) %}
       \{% for {{blk.body.vars.splat}} in {{blk.body.exp}} %}
         ToHtml.to_html_eval_exps({{io}}, {{indent_level}}) do
-          # Crystal can turn inline macro expressions (`{{...}}`) inside a macro-for body into
-          # "line-based" output (newlines around the expansion), which breaks calls without
-          # parentheses (e.g. `name:\n"value"\n, value:`). We keep real statement newlines, but
-          # collapse the ones that can't be statement separators.
-          #
-          # Upstream: https://github.com/crystal-lang/crystal/issues/16544
-          {%
-            body = blk.body.body.stringify
-              .gsub(/\s*\n\s*,\s*/, ", ")
-              .gsub(/\s*\n\s*\./, ".")
-              .gsub(/\s*\n\s*do\b/, " do")
-              .gsub(/([:,(\[{=])\s*\n\s*/, "\\1 ")
-          %}
-          {{body.id}}
+          {{blk.body.body.expressions.join("").id}}
         end
       \{% end %}
     {% elsif blk.body.is_a?(MacroExpression) || blk.body.is_a?(MacroLiteral) %}
