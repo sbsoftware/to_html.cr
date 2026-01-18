@@ -46,8 +46,8 @@ module ToHtml::InstanceTemplate::YieldSpec
       </html>
       HTML
 
-      layout.to_html do |io, indent_level|
-        View.to_html(io, indent_level)
+      layout.to_html do |io|
+        View.to_html(io)
       end.should eq(expected)
     end
   end
