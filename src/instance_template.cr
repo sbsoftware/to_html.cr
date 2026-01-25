@@ -42,6 +42,24 @@ module ToHtml
     end
   end
 
+  macro inline_template(name, &blk)
+    def {{name.id}}({{blk.args.splat}})
+      ->(io : IO) do
+        ToHtml.to_html_eval_exps(io, 0) {{blk}}
+        nil
+      end
+    end
+  end
+
+  macro class_inline_template(name, &blk)
+    def self.{{name.id}}({{blk.args.splat}})
+      ->(io : IO) do
+        ToHtml.to_html_eval_exps(io, 0) {{blk}}
+        nil
+      end
+    end
+  end
+
   # :nodoc:
   macro to_html_eval_exps(io, indent_level, &blk)
     {% if blk.body.is_a?(Expressions) %}
@@ -139,7 +157,9 @@ module ToHtml
       # do nothing
     {% else %}
       %var = {{blk.body}}
-      if %var.responds_to?(:to_html)
+      if %var.is_a?(Proc(IO, Nil))
+        %var.call({{io}})
+      elsif %var.responds_to?(:to_html)
         %var.to_html({{io}}, {{indent_level}})
       else
         {% if flag?(:to_html_pretty) %}

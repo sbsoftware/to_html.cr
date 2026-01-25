@@ -175,6 +175,52 @@ end
 puts ClassView.to_html
 ```
 
+### Inline Templates
+
+```crystal
+require "to_html"
+
+class InlineView
+  getter names : Array(String)
+
+  def initialize(@names); end
+
+  ToHtml.inline_template :greeting do |who|
+    p { "Hello #{who}" }
+  end
+
+  ToHtml.instance_template do
+    div do
+      names.each do |name|
+        greeting(name)
+      end
+    end
+  end
+end
+
+puts InlineView.new(["Ada", "Grace"]).to_html
+```
+
+### Class Inline Templates
+
+```crystal
+require "to_html"
+
+class InlineClassView
+  ToHtml.class_inline_template :title_fragment do |text|
+    h2 { text }
+  end
+
+  ToHtml.class_template do
+    section do
+      title_fragment("Hello")
+    end
+  end
+end
+
+puts InlineClassView.to_html
+```
+
 ### Compile-time Control Flow (MacroIf / MacroFor)
 
 In addition to runtime `if`/`#each`, you can also use Crystal's macro control flow (`{% if %}` / `{% for %}`) inside templates. This runs at compile-time and can be used to generate markup based on compile-time information such as compiler flags or `@type`.
