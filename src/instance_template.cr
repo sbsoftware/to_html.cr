@@ -48,7 +48,7 @@ module ToHtml
   macro inline_template(name, &blk)
     def {{name.id}}({{blk.args.splat}})
       ->(io : IO) do
-        ToHtml.to_html_eval_exps(io, 0) {{blk}}
+        ToHtml.to_html_eval_exps(io) {{blk}}
         nil
       end
     end
@@ -57,7 +57,7 @@ module ToHtml
   macro class_inline_template(name, &blk)
     def self.{{name.id}}({{blk.args.splat}})
       ->(io : IO) do
-        ToHtml.to_html_eval_exps(io, 0) {{blk}}
+        ToHtml.to_html_eval_exps(io) {{blk}}
         nil
       end
     end
