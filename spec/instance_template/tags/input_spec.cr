@@ -8,7 +8,7 @@ module ToHtml::InstanceTemplate::Tags::InputSpec
         input type: :checkbox
         input type: :color
         input type: :date
-        input type: "datetime-local"
+        input type: :datetime_local
         input type: :email
         input type: :file
         input type: :hidden
@@ -26,6 +26,7 @@ module ToHtml::InstanceTemplate::Tags::InputSpec
         input type: :time
         input type: :url
         input type: :week
+        input name: "plain"
       end
     end
   end
@@ -58,6 +59,7 @@ module ToHtml::InstanceTemplate::Tags::InputSpec
         <input type="time">
         <input type="url">
         <input type="week">
+        <input name="plain">
       </form>
       HTML
 

@@ -5,6 +5,17 @@ module ToHtml
       Dialog
       Get
       Post
+
+      def to_s : String
+        case self
+        in Dialog
+          "dialog"
+        in Get
+          "get"
+        in Post
+          "post"
+        end
+      end
     end
   end
 end

@@ -7,6 +7,7 @@ module ToHtml::InstanceTemplate::Tags::FormSpec
       form method: :get
       form method: :post
       form method: "foo"
+      form
     end
   end
 
@@ -19,6 +20,7 @@ module ToHtml::InstanceTemplate::Tags::FormSpec
       <form method="get"></form>
       <form method="post"></form>
       <form method="foo"></form>
+      <form></form>
       HTML
 
       view.to_html.should eq(expected)

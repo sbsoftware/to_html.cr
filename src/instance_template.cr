@@ -163,16 +163,79 @@ module ToHtml
 
   # :nodoc:
   macro to_html_add_tag(io, call)
-    {% if call.named_args %}
-      ToHtml.{{ "#{call.name}_typecheck(#{call.named_args.splat})".id }}
-    {% end %}
     {% if call.args.empty? && !call.named_args && call.block && call.block.body.is_a?(StringLiteral) %}
       {{io}} << {{"<" + ToHtml::TAG_NAMES[call.name.stringify] + ">" + call.block.body + "</" + ToHtml::TAG_NAMES[call.name.stringify] + ">"}}
     {% elsif call.args.empty? && call.named_args && call.named_args.all? { |arg| arg.value.is_a?(StringLiteral) } && call.block && call.block.body.is_a?(StringLiteral) %}
       {{io}} << {{"<" + ToHtml::TAG_NAMES[call.name.stringify] + " " + call.named_args.map { |a| "#{a.name}=#{a.value.id.stringify}" }.join(" ") + ">" + call.block.body + "</" + ToHtml::TAG_NAMES[call.name.stringify] + ">"}}
+    {% elsif call.args.empty? && call.named_args && call.named_args.all? { |arg| arg.value.is_a?(StringLiteral) || arg.value.is_a?(SymbolLiteral) } && call.block && call.block.body.is_a?(StringLiteral) %}
+      {% typecheck = ToHtml::TagTypechecks.methods.find { |method| method.name == "#{call.name}_typecheck" } %}
+      {% attr_parts = [] of ASTNode %}
+      {% for named_arg in call.named_args %}
+        {% if named_arg.value.is_a?(StringLiteral) %}
+          {% attr_parts << "#{named_arg.name}=#{named_arg.value.id.stringify}" %}
+        {% else %}
+          {% symbol_value = named_arg.value.id.stringify %}
+          {% enum_const = nil %}
+          {% if typecheck %}
+            {% arg_def = typecheck.args.find { |arg| arg.name == named_arg.name } %}
+            {% if arg_def && arg_def.restriction %}
+              {% match = arg_def.restriction.stringify.match(/AttrEnums::([A-Za-z0-9_]+)/) %}
+              {% if match %}
+                {% enum_name = match[1].id %}
+                {% enum_member = symbol_value.gsub(/-/, "_").camelcase.id %}
+                {% enum_const = "AttrEnums::#{enum_name}::#{enum_member}".id %}
+              {% end %}
+            {% end %}
+          {% end %}
+          {% if enum_const %}
+            {% attr_parts << ("\"#{named_arg.name}=\\\"\" + #{enum_const}.to_s + \"\\\"\"").id %}
+          {% else %}
+            {% attr_parts << ("\"#{named_arg.name}=\\\"\" + #{symbol_value} + \"\\\"\"").id %}
+          {% end %}
+        {% end %}
+      {% end %}
+      {% attr_expr = attr_parts.first %}
+      {% for part in attr_parts[1..] %}
+        {% attr_expr = "#{attr_expr} + \" \" + #{part}".id %}
+      {% end %}
+      {% tag_name = ToHtml::TAG_NAMES[call.name.stringify] %}
+      {{io}} << ("<" + {{tag_name}} + " " + {{attr_expr}} + ">" + {{call.block.body}} + "</" + {{tag_name}} + ">")
     {% else %}
       {% if call.named_args && call.args.empty? && call.named_args.all? { |arg| arg.value.is_a?(StringLiteral) } %}
         {{io}} << {{"<" + ToHtml::TAG_NAMES[call.name.stringify] + " " + call.named_args.map { |a| "#{a.name}=#{a.value.id.stringify}" }.join(" ") + ">"}}
+      {% elsif call.named_args && call.args.empty? && call.named_args.all? { |arg| arg.value.is_a?(StringLiteral) || arg.value.is_a?(SymbolLiteral) } %}
+        {% typecheck = ToHtml::TagTypechecks.methods.find { |method| method.name == "#{call.name}_typecheck" } %}
+        {% attr_parts = [] of ASTNode %}
+        {% for named_arg in call.named_args %}
+          {% if named_arg.value.is_a?(StringLiteral) %}
+            {% attr_parts << "#{named_arg.name}=#{named_arg.value.id.stringify}" %}
+          {% else %}
+            {% symbol_value = named_arg.value.id.stringify %}
+            {% enum_const = nil %}
+            {% if typecheck %}
+              {% arg_def = typecheck.args.find { |arg| arg.name == named_arg.name } %}
+              {% if arg_def && arg_def.restriction %}
+                {% match = arg_def.restriction.stringify.match(/AttrEnums::([A-Za-z0-9_]+)/) %}
+                {% if match %}
+                  {% enum_name = match[1].id %}
+                  {% enum_member = symbol_value.gsub(/-/, "_").camelcase.id %}
+                  {% enum_const = "AttrEnums::#{enum_name}::#{enum_member}".id %}
+                {% end %}
+              {% end %}
+            {% end %}
+            {% if enum_const %}
+              {% attr_parts << ("\"#{named_arg.name}=\\\"\" + #{enum_const}.to_s + \"\\\"\"").id %}
+            {% else %}
+              {% attr_parts << ("\"#{named_arg.name}=\\\"\" + #{symbol_value} + \"\\\"\"").id %}
+            {% end %}
+          {% end %}
+        {% end %}
+        {% attr_expr = attr_parts.first %}
+        {% for part in attr_parts[1..] %}
+          {% attr_expr = "#{attr_expr} + \" \" + #{part}".id %}
+        {% end %}
+        {% tag_name = ToHtml::TAG_NAMES[call.name.stringify] %}
+        {{io}} << ("<" + {{tag_name}} + " " + {{attr_expr}} + ">")
       {% else %}
         %attr_hash = ToHtml::AttributeHash.new
 
@@ -192,8 +255,9 @@ module ToHtml
         {% end %}
 
         {% if call.named_args %}
+          %named_args = ToHtml.{{ "#{call.name}_typecheck(#{call.named_args.splat})".id }}
           {% for named_arg in call.named_args %}
-            %attr_hash[{{named_arg.name.stringify}}] = {{named_arg.value}}
+            %attr_hash[{{named_arg.name.stringify}}] = %named_args[{{named_arg.name.stringify}}]
           {% end %}
         {% end %}
 
@@ -215,13 +279,43 @@ module ToHtml
 
   # :nodoc:
   macro to_html_add_void_tag(io, call)
-    {% if call.named_args %}
-      ToHtml.{{ "#{call.name}_typecheck(#{call.named_args.splat})".id }}
-    {% end %}
     {% if call.args.empty? && !call.named_args %}
       {{io}} << "<{{call.name}}>"
     {% elsif call.args.empty? && call.named_args && call.named_args.all? { |arg| arg.value.is_a?(StringLiteral) } %}
       {{io}} << "<{{call.name}} " + {{ call.named_args.map { |a| "#{a.name}=#{a.value.id.stringify}" }.join(" ") }} + ">"
+    {% elsif call.args.empty? && call.named_args && call.named_args.all? { |arg| arg.value.is_a?(StringLiteral) || arg.value.is_a?(SymbolLiteral) } %}
+      {% typecheck = ToHtml::TagTypechecks.methods.find { |method| method.name == "#{call.name}_typecheck" } %}
+      {% attr_parts = [] of ASTNode %}
+      {% for named_arg in call.named_args %}
+        {% if named_arg.value.is_a?(StringLiteral) %}
+          {% attr_parts << "#{named_arg.name}=#{named_arg.value.id.stringify}" %}
+        {% else %}
+          {% symbol_value = named_arg.value.id.stringify %}
+          {% enum_const = nil %}
+          {% if typecheck %}
+            {% arg_def = typecheck.args.find { |arg| arg.name == named_arg.name } %}
+            {% if arg_def && arg_def.restriction %}
+              {% match = arg_def.restriction.stringify.match(/AttrEnums::([A-Za-z0-9_]+)/) %}
+              {% if match %}
+                {% enum_name = match[1].id %}
+                {% enum_member = symbol_value.gsub(/-/, "_").camelcase.id %}
+                {% enum_const = "AttrEnums::#{enum_name}::#{enum_member}".id %}
+              {% end %}
+            {% end %}
+          {% end %}
+          {% if enum_const %}
+            {% attr_parts << ("\"#{named_arg.name}=\\\"\" + #{enum_const}.to_s + \"\\\"\"").id %}
+          {% else %}
+            {% attr_parts << ("\"#{named_arg.name}=\\\"\" + #{symbol_value} + \"\\\"\"").id %}
+          {% end %}
+        {% end %}
+      {% end %}
+      {% attr_expr = attr_parts.first %}
+      {% for part in attr_parts[1..] %}
+        {% attr_expr = "#{attr_expr} + \" \" + #{part}".id %}
+      {% end %}
+      {% tag_name = call.name.stringify %}
+      {{io}} << ("<" + {{tag_name}} + " " + {{attr_expr}} + ">")
     {% else %}
       %attr_hash = ToHtml::AttributeHash.new
 
@@ -241,8 +335,9 @@ module ToHtml
       {% end %}
 
       {% if call.named_args %}
+        %named_args = ToHtml.{{ "#{call.name}_typecheck(#{call.named_args.splat})".id }}
         {% for named_arg in call.named_args %}
-          %attr_hash[{{named_arg.name.stringify}}] = {{named_arg.value}}
+          %attr_hash[{{named_arg.name.stringify}}] = %named_args[{{named_arg.name.stringify}}]
         {% end %}
       {% end %}
 
