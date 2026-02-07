@@ -31,4 +31,3 @@ module ToHtml::InstanceTemplate::StaticInstanceTemplateSpec
     end
   end
 end
-

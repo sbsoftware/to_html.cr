@@ -428,8 +428,8 @@ module ToHtml
       args
     end
 
-    def meta_typecheck(**args)
-      args
+    def meta_typecheck(name : (AttrEnums::MetaName | String | Nil) = nil, **args)
+      args.merge(name: name)
     end
 
     def param_typecheck(**args)
