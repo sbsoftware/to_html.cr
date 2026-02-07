@@ -20,11 +20,11 @@ end
 to_html_output = normalize(to_html.to_html)
 
 {
-  "ecr" => normalize(ecr.to_s),
-  "blueprint" => normalize(blueprint.to_s),
-  "water" => normalize(water.to_html),
+  "ecr"          => normalize(ecr.to_s),
+  "blueprint"    => normalize(blueprint.to_s),
+  "water"        => normalize(water.to_html),
   "html_builder" => normalize(html_builder.to_s),
-  "markout" => normalize(markout.to_s)
+  "markout"      => normalize(markout.to_s),
 }.each do |name, output|
   if to_html_output != output
     puts to_html_output

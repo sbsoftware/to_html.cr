@@ -3,7 +3,7 @@ require "../spec_helper"
 module ToHtml::InstanceTemplate::AttributesSpec
   class MyView
     SPECIAL_CSS_CLASSES = [MyCssClass, MyOtherCssClass]
-    DEFAULT_VALUE = "two"
+    DEFAULT_VALUE       = "two"
 
     ToHtml.instance_template do
       div MyCssClass, MyOtherCssClass, {"class", "so-unique"}, more_css_classes do
