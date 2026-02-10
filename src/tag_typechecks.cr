@@ -424,8 +424,8 @@ module ToHtml
       args.merge(type: type)
     end
 
-    def link_typecheck(**args)
-      args
+    def link_typecheck(rel : (AttrEnums::LinkRel | String | Nil) = nil, **args)
+      args.merge(rel: rel)
     end
 
     def meta_typecheck(name : (AttrEnums::MetaName | String | Nil) = nil, **args)
