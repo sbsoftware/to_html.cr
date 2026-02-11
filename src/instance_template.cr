@@ -131,11 +131,7 @@ module ToHtml
       {% end %}
       end
     {% elsif blk.body.is_a?(Case) %}
-      {% if blk.body.cond.is_a?(Nop) %}
-        case
-      {% else %}
-        case {{blk.body.cond}}
-      {% end %}
+      case {{blk.body.cond}}
       {% for w in blk.body.whens %}
         when {{w.conds.splat}}
           ToHtml.to_html_eval_exps({{io}}, {{indent_level}}) do
