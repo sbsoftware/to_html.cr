@@ -30,10 +30,10 @@ module ToHtml::InstanceTemplate::DataAriaAttributesSpec
       ]
 
       div attrs, {"data-foo", "tuple-explicit"}, {"aria-label", "tuple-explicit-label"},
-        data: {"foo" => "named-hash", "count" => 2.5, "skip" => nil, "data-prefixed" => "normalized"},
-        aria: {"label" => "named-label", "current" => false, "omitted" => nil},
         data_foo: "named-explicit",
-        aria_label: "named-explicit-label"
+        aria_label: "named-explicit-label",
+        data: {"foo" => "named-hash-last", "count" => 2.5, "bar" => nil, "data-prefixed" => "normalized"},
+        aria: {"label" => "named-label-last", "current" => false, "omitted" => nil}
     end
   end
 
@@ -41,6 +41,12 @@ module ToHtml::InstanceTemplate::DataAriaAttributesSpec
     ToHtml.instance_template do
       div data: {"foo_bar" => "snake", :"foo-baz" => "dash", :"data-qux" => "prefixed"},
         aria: {"labelled_by" => "target", :"aria-described-by" => "description"}
+    end
+  end
+
+  class NestedView
+    ToHtml.instance_template do
+      div data: {foo: {blah: "baz"}}, aria: {label: {text: "X"}}
     end
   end
 
@@ -53,12 +59,16 @@ module ToHtml::InstanceTemplate::DataAriaAttributesSpec
       TypeView.new.to_html.should eq(%(<div data-enabled="true" data-count="7" data-ratio="2.5" aria-hidden="false"></div>))
     end
 
-    it "merges array, tuple, to_html_attrs, and named args with explicit data-*/aria-* precedence" do
-      MergeView.new.to_html.should eq(%(<div data-foo="named-explicit" data-bar="1" aria-label="named-explicit-label" data-baz="true" aria-hidden="false" data-count="2.5" data-prefixed="normalized" aria-current="false"></div>))
+    it "merges array, tuple, to_html_attrs, and named args with last-write-wins semantics" do
+      MergeView.new.to_html.should eq(%(<div data-foo="named-hash-last" aria-label="named-label-last" data-baz="true" aria-hidden="false" data-count="2.5" data-prefixed="normalized" aria-current="false"></div>))
     end
 
     it "normalizes symbol and string keys for data/aria hashes" do
       NormalizeView.new.to_html.should eq(%(<div data-foo-bar="snake" data-foo-baz="dash" data-qux="prefixed" aria-labelled-by="target" aria-described-by="description"></div>))
+    end
+
+    it "flattens nested data/aria hashes and named tuples" do
+      NestedView.new.to_html.should eq(%(<div data-foo-blah="baz" aria-label-text="X"></div>))
     end
   end
 end
