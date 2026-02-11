@@ -130,6 +130,27 @@ module ToHtml
           {% end %}
       {% end %}
       end
+    {% elsif blk.body.is_a?(Case) %}
+      case {{blk.body.cond}}
+      {% for w in blk.body.whens %}
+        when {{w.conds.splat}}
+          ToHtml.to_html_eval_exps({{io}}, {{indent_level}}) do
+            {{w.body}}
+          end
+          {% if flag?(:to_html_pretty) && break_line %}
+            {{io}} << "\n"
+          {% end %}
+      {% end %}
+      {% if !blk.body.else.is_a?(Nop) %}
+        else
+          ToHtml.to_html_eval_exps({{io}}, {{indent_level}}) do
+            {{blk.body.else}}
+          end
+          {% if flag?(:to_html_pretty) && break_line %}
+            {{io}} << "\n"
+          {% end %}
+      {% end %}
+      end
     {% elsif blk.body.is_a?(MacroIf) %}
       \{% if {{blk.body.cond}} %}
         ToHtml.to_html_eval_exps({{io}}, {{indent_level}}) do
