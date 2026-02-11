@@ -1,0 +1,41 @@
+# sbsoftware-agent codex transcript
+
+## Exit Code
+1
+
+## Prompt
+```
+You are implementing a Jira ticket in the current repository checkout.
+
+Jira issue: HTML-51
+Summary: `data`/`aria` attribute expansion
+Description:
+Context Users frequently need data-* and aria-* attributes, which today require manual string keys. A helper should make these concise while preserving existing attribute composition behavior. Description Add attribute helpers so data: { foo: "bar" } serializes to data-foo="bar" (same for aria: ). Support stringification for common value types (String, Bool, numbers, Nil), and define merge semantics when multiple sources provide data-* / aria-* attributes (explicit data-foo: vs data: hash, tuple/array sources, to_html_attrs ). Provide key normalization rules for symbol/string keys and hyphenated names. Missing or nil values should omit the attribute. Acceptance criteria data: { foo: "bar" } renders data-foo="bar" and aria: { label: "X" } renders aria-label="X" . data: / aria: merges with explicitly provided data-* / aria-* attributes using documented precedence. Supports String, Bool, Int/Float, and Nil; Nil omits the attribute. Works with attribute composition via tuples/arrays and to_html_attrs . Documented with at least one README example.
+
+Branch context:
+- Base branch: releases/v1.7.0
+- Feature branch: feature/HTML-51
+
+Requirements:
+1. Implement the issue in this repo.
+2. Add or update Crystal specs as needed.
+3. Run specs and ensure they pass before finishing.
+4. Produce exactly one commit message and one PR draft.
+
+Return output using this exact marker format:
+[COMMIT_MESSAGE]
+<single commit message>
+[/COMMIT_MESSAGE]
+[PR_TITLE]
+<pull request title>
+[/PR_TITLE]
+[PR_DESCRIPTION]
+<pull request description in markdown>
+[/PR_DESCRIPTION]
+```
+
+## Output
+```
+Error: stdin is not a terminal
+
+```
