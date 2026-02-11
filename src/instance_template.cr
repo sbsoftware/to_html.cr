@@ -251,7 +251,7 @@ module ToHtml
           %attr_hash[{{arg}}.first] = {{arg}}.last
         {% else %}
           %arg = {{arg}}
-          if %arg.is_a?(Array)
+          if %arg.is_a?(Array) || %arg.is_a?(Tuple)
             %arg.each do |item|
               item.to_html_attrs({{call.name.stringify}}, %attr_hash)
             end
