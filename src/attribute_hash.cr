@@ -10,12 +10,30 @@ module ToHtml
     end
 
     def []=(key, value : Bool)
+      key = key.to_s
+
+      if prefixed_key = normalize_explicit_prefixed_key(key)
+        attributes[prefixed_key] = value.to_s
+        return
+      end
+
       return unless value
 
       boolean_attributes << key
     end
 
     def []=(key, value)
+      key = key.to_s
+
+      if prefixed_key = normalize_explicit_prefixed_key(key)
+        assign_prefixed_value(prefixed_key, value)
+        return
+      end
+
+      if key == "data" || key == "aria"
+        return if assign_prefixed_hash(key, value)
+      end
+
       if attributes.has_key?(key)
         attributes[key] += " #{value}" if value
       else
@@ -37,6 +55,58 @@ module ToHtml
       end
       io << " " if boolean_attributes.any?
       boolean_attributes.join(io, " ")
+    end
+
+    private def assign_prefixed_hash(prefix : String, value : Hash | NamedTuple) : Bool
+      prefix_with_separator = "#{prefix}-"
+      value.each do |raw_key, raw_value|
+        key = raw_key.to_s.strip.gsub("_", "-")
+        next if key.empty? || key == prefix
+
+        if key.starts_with?(prefix_with_separator)
+          next if key.size == prefix_with_separator.size
+
+          assign_prefixed_value(key, raw_value)
+        else
+          assign_prefixed_value("#{prefix_with_separator}#{key}", raw_value)
+        end
+      end
+
+      true
+    end
+
+    private def assign_prefixed_hash(_prefix : String, _value) : Bool
+      false
+    end
+
+    private def normalize_explicit_prefixed_key(key : String) : String?
+      key = key.gsub("_", "-")
+
+      if key.starts_with?("data-")
+        return if key == "data-"
+        key
+      elsif key.starts_with?("aria-")
+        return if key == "aria-"
+        key
+      end
+    end
+
+    # Nested data/aria maps are flattened recursively into hyphen-separated keys.
+    private def assign_prefixed_value(key : String, value : Hash | NamedTuple)
+      value.each do |raw_key, raw_value|
+        nested_key_part = raw_key.to_s.strip.gsub("_", "-")
+        next if nested_key_part.empty?
+
+        assign_prefixed_value("#{key}-#{nested_key_part}", raw_value)
+      end
+    end
+
+    private def assign_prefixed_value(key : String, _value : Nil)
+      attributes.delete(key)
+    end
+
+    private def assign_prefixed_value(key : String, value)
+      attributes[key] = value.to_s
     end
   end
 end

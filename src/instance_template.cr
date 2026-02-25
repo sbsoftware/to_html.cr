@@ -83,14 +83,44 @@ module ToHtml
       ToHtml.to_html_add_tag({{io}}, {{indent_level}}, {{break_line}}, {{blk.body}})
     {% elsif blk.body.is_a?(Call) && blk.body.receiver.nil? && blk.body.name.stringify == "doctype" %}
       {{io}} << "<!DOCTYPE {{blk.body.args.first.id}}>"
-    {% elsif blk.body.is_a?(Call) && blk.body.receiver && blk.body.name.stringify == "each" %}
-      {{blk.body.receiver}}.each_with_index do {% if !blk.body.block.args.empty? %} |{{blk.body.block.args.splat}}, %index| {% end %}
+    {% elsif blk.body.is_a?(Call) && blk.body.receiver && blk.body.block && blk.body.name.stringify == "each" %}
+      {% if flag?(:to_html_pretty) %}
+        %to_html_each_break_line = false
+      {% end %}
+      {{blk.body.receiver}}.each do {% if !blk.body.block.args.empty? %} |{{blk.body.block.args.splat}}| {% end %}
+        {% if flag?(:to_html_pretty) %}
+          {{io}} << "\n" if %to_html_each_break_line
+          %to_html_each_break_line = true
+        {% end %}
         ToHtml.to_html_eval_exps({{io}}, {{indent_level}}) do
           {{blk.body.block.body}}
         end
+      end
+    {% elsif blk.body.is_a?(Call) && blk.body.receiver && blk.body.block && blk.body.name.stringify == "each_with_index" %}
+      {% if flag?(:to_html_pretty) %}
+        %to_html_each_with_index_break_line = false
+      {% end %}
+      {{blk.body.receiver}}.each_with_index do {% if !blk.body.block.args.empty? %} |{{blk.body.block.args.splat}}| {% end %}
         {% if flag?(:to_html_pretty) %}
-          {{io}} << "\n" unless %index == {{blk.body.receiver}}.size - 1
+          {{io}} << "\n" if %to_html_each_with_index_break_line
+          %to_html_each_with_index_break_line = true
         {% end %}
+        ToHtml.to_html_eval_exps({{io}}, {{indent_level}}) do
+          {{blk.body.block.body}}
+        end
+      end
+    {% elsif blk.body.is_a?(Call) && blk.body.receiver && blk.body.block && blk.body.name.stringify == "times" %}
+      {% if flag?(:to_html_pretty) %}
+        %to_html_times_break_line = false
+      {% end %}
+      {{blk.body.receiver}}.times do {% if !blk.body.block.args.empty? %} |{{blk.body.block.args.splat}}| {% end %}
+        {% if flag?(:to_html_pretty) %}
+          {{io}} << "\n" if %to_html_times_break_line
+          %to_html_times_break_line = true
+        {% end %}
+        ToHtml.to_html_eval_exps({{io}}, {{indent_level}}) do
+          {{blk.body.block.body}}
+        end
       end
     {% elsif blk.body.is_a?(Call) && blk.body.receiver && blk.body.name.stringify == "to_html" && blk.body.block %}
       {{blk.body.receiver}}.to_html({{io}}, {{indent_level}}) do |%io, %indent_level|
@@ -121,6 +151,27 @@ module ToHtml
           {% end %}
         {% end %}
       {% if !blk.body.else.nil? %}
+        else
+          ToHtml.to_html_eval_exps({{io}}, {{indent_level}}) do
+            {{blk.body.else}}
+          end
+          {% if flag?(:to_html_pretty) && break_line %}
+            {{io}} << "\n"
+          {% end %}
+      {% end %}
+      end
+    {% elsif blk.body.is_a?(Case) %}
+      case {{blk.body.cond}}
+      {% for w in blk.body.whens %}
+        when {{w.conds.splat}}
+          ToHtml.to_html_eval_exps({{io}}, {{indent_level}}) do
+            {{w.body}}
+          end
+          {% if flag?(:to_html_pretty) && break_line %}
+            {{io}} << "\n"
+          {% end %}
+      {% end %}
+      {% if !blk.body.else.is_a?(Nop) %}
         else
           ToHtml.to_html_eval_exps({{io}}, {{indent_level}}) do
             {{blk.body.else}}
@@ -251,7 +302,7 @@ module ToHtml
           %attr_hash[{{arg}}.first] = {{arg}}.last
         {% else %}
           %arg = {{arg}}
-          if %arg.is_a?(Array)
+          if %arg.is_a?(Array) || %arg.is_a?(Tuple)
             %arg.each do |item|
               item.to_html_attrs({{call.name.stringify}}, %attr_hash)
             end

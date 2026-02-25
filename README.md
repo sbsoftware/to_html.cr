@@ -297,6 +297,29 @@ end
 puts NamedArgumentsView.new.to_html
 ```
 
+#### `data` / `aria` Helpers
+
+You can define `data-*` and `aria-*` attributes via `data:` / `aria:` hashes or named tuples.
+When multiple sources assign the same `data-*` / `aria-*` key, the last assignment wins.
+
+```crystal
+require "to_html"
+
+class DataAriaView
+  ToHtml.instance_template do
+    div(
+      {"data-foo", "from-tuple"},
+      data_foo: "from-explicit",
+      data: {foo: "from-hash", user_id: 42, active: true, ignored: nil},
+      aria: {label: "Profile", hidden: false}
+    )
+  end
+end
+
+# <div data-foo="from-hash" data-user-id="42" data-active="true" aria-label="Profile" aria-hidden="false"></div>
+puts DataAriaView.new.to_html
+```
+
 #### Object Interface
 
 Another way to add attributes is via objects that implement `#to_html_attrs`. The easiest way to do so is via the `ToHtml.instance_tag_attrs`/`ToHtml.class_tag_attrs` macros.
