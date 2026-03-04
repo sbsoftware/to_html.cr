@@ -26,7 +26,7 @@ module ToHtml
       key = key.to_s
 
       if prefixed_key = normalize_explicit_prefixed_key(key)
-        assign_prefixed_value(prefixed_key, value)
+        append_attribute(prefixed_key, value)
         return
       end
 
@@ -34,11 +34,7 @@ module ToHtml
         return if assign_prefixed_hash(key, value)
       end
 
-      if attributes.has_key?(key)
-        attributes[key] += " #{value}" if value
-      else
-        attributes[key] = value.to_s
-      end
+      append_attribute(key, value)
     end
 
     def empty?
@@ -106,6 +102,10 @@ module ToHtml
     end
 
     private def assign_prefixed_value(key : String, value)
+      append_attribute(key, value)
+    end
+
+    private def append_attribute(key : String, value)
       if attributes.has_key?(key)
         attributes[key] += " #{value}" if value
       else
