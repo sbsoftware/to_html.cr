@@ -300,7 +300,7 @@ puts NamedArgumentsView.new.to_html
 #### `data` / `aria` Helpers
 
 You can define `data-*` and `aria-*` attributes via `data:` / `aria:` hashes or named tuples.
-When multiple sources assign the same `data-*` / `aria-*` key, the last assignment wins.
+When multiple sources assign the same `data-*` / `aria-*` key, all values are joined with spaces.
 
 ```crystal
 require "to_html"
@@ -316,7 +316,7 @@ class DataAriaView
   end
 end
 
-# <div data-foo="from-hash" data-user-id="42" data-active="true" aria-label="Profile" aria-hidden="false"></div>
+# <div data-foo="from-tuple from-explicit from-hash" data-user-id="42" data-active="true" aria-label="Profile" aria-hidden="false"></div>
 puts DataAriaView.new.to_html
 ```
 

@@ -59,8 +59,11 @@ module ToHtml::InstanceTemplate::DataAriaAttributesSpec
       TypeView.new.to_html.should eq(%(<div data-enabled="true" data-count="7" data-ratio="2.5" aria-hidden="false"></div>))
     end
 
-    it "merges array, tuple, to_html_attrs, and named args with last-write-wins semantics" do
-      MergeView.new.to_html.should eq(%(<div data-foo="named-hash-last" aria-label="named-label-last" data-baz="true" aria-hidden="false" data-count="2.5" data-prefixed="normalized" aria-current="false"></div>))
+    it "merges array, tuple, to_html_attrs, and named args by joining duplicate values" do
+      expected = %(<div data-foo="provider-hash provider-explicit array-hash tuple-explicit named-explicit named-hash-last" data-bar="1" ) +
+                 %(aria-label="provider-label provider-explicit-label array-label tuple-explicit-label named-explicit-label named-label-last" data-baz="true" aria-hidden="false" data-count="2.5" data-prefixed="normalized" aria-current="false"></div>)
+
+      MergeView.new.to_html.should eq(expected)
     end
 
     it "normalizes symbol and string keys for data/aria hashes" do

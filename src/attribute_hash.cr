@@ -13,7 +13,7 @@ module ToHtml
       key = key.to_s
 
       if prefixed_key = normalize_explicit_prefixed_key(key)
-        attributes[prefixed_key] = value.to_s
+        assign_prefixed_value(prefixed_key, value)
         return
       end
 
@@ -102,11 +102,15 @@ module ToHtml
     end
 
     private def assign_prefixed_value(key : String, _value : Nil)
-      attributes.delete(key)
+      # Keep data/aria nil behavior aligned with regular attributes: nil never appends.
     end
 
     private def assign_prefixed_value(key : String, value)
-      attributes[key] = value.to_s
+      if attributes.has_key?(key)
+        attributes[key] += " #{value}" if value
+      else
+        attributes[key] = value.to_s
+      end
     end
   end
 end
