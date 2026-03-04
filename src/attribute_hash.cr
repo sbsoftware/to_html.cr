@@ -11,9 +11,11 @@ module ToHtml
 
     def []=(key, value : Bool)
       key = key.to_s
+      normalized_key = key.gsub("_", "-")
 
-      if prefixed_key = normalize_explicit_prefixed_key(key)
-        attributes[prefixed_key] = value.to_s
+      if normalized_key.starts_with?("data-") || normalized_key.starts_with?("aria-")
+        return if normalized_key == "data-" || normalized_key == "aria-"
+        append_attribute(normalized_key, value)
         return
       end
 
@@ -24,9 +26,11 @@ module ToHtml
 
     def []=(key, value)
       key = key.to_s
+      normalized_key = key.gsub("_", "-")
 
-      if prefixed_key = normalize_explicit_prefixed_key(key)
-        assign_prefixed_value(prefixed_key, value)
+      if normalized_key.starts_with?("data-") || normalized_key.starts_with?("aria-")
+        return if normalized_key == "data-" || normalized_key == "aria-"
+        append_prefixed_value(normalized_key, value)
         return
       end
 
@@ -34,11 +38,7 @@ module ToHtml
         return if assign_prefixed_hash(key, value)
       end
 
-      if attributes.has_key?(key)
-        attributes[key] += " #{value}" if value
-      else
-        attributes[key] = value.to_s
-      end
+      append_attribute(key, value)
     end
 
     def empty?
@@ -66,9 +66,9 @@ module ToHtml
         if key.starts_with?(prefix_with_separator)
           next if key.size == prefix_with_separator.size
 
-          assign_prefixed_value(key, raw_value)
+          append_prefixed_value(key, raw_value)
         else
-          assign_prefixed_value("#{prefix_with_separator}#{key}", raw_value)
+          append_prefixed_value("#{prefix_with_separator}#{key}", raw_value)
         end
       end
 
@@ -79,34 +79,29 @@ module ToHtml
       false
     end
 
-    private def normalize_explicit_prefixed_key(key : String) : String?
-      key = key.gsub("_", "-")
-
-      if key.starts_with?("data-")
-        return if key == "data-"
-        key
-      elsif key.starts_with?("aria-")
-        return if key == "aria-"
-        key
-      end
-    end
-
     # Nested data/aria maps are flattened recursively into hyphen-separated keys.
-    private def assign_prefixed_value(key : String, value : Hash | NamedTuple)
-      value.each do |raw_key, raw_value|
-        nested_key_part = raw_key.to_s.strip.gsub("_", "-")
-        next if nested_key_part.empty?
+    private def append_prefixed_value(key : String, value)
+      case value
+      when Hash, NamedTuple
+        value.each do |raw_key, raw_value|
+          nested_key_part = raw_key.to_s.strip.gsub("_", "-")
+          next if nested_key_part.empty?
 
-        assign_prefixed_value("#{key}-#{nested_key_part}", raw_value)
+          append_prefixed_value("#{key}-#{nested_key_part}", raw_value)
+        end
+      when Nil
+        # Keep data/aria nil behavior aligned with regular attributes: nil never appends.
+      else
+        append_attribute(key, value)
       end
     end
 
-    private def assign_prefixed_value(key : String, _value : Nil)
-      attributes.delete(key)
-    end
-
-    private def assign_prefixed_value(key : String, value)
-      attributes[key] = value.to_s
+    private def append_attribute(key : String, value)
+      if attributes.has_key?(key)
+        attributes[key] += " #{value}" if value
+      else
+        attributes[key] = value.to_s
+      end
     end
   end
 end
